@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/drawer_list_item_background"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:layoutDirection="ltr">
+
+    <TextView
+        android:id="@+id/menu_item_text"
+        android:textSize="23sp"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="@drawable/drawer_list_item_text_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

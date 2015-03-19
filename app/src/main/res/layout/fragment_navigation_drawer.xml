@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/menu_header"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layoutDirection="ltr"
+        android:background="@color/primary_blue">
+
+        <ImageView
+            android:src="@drawable/ubyssey_large_logo"
+            android:layout_marginLeft="20dp"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/menu_listview"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
+</LinearLayout>
