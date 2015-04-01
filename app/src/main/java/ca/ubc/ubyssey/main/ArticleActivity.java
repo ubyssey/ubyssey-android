@@ -2,6 +2,7 @@ package ca.ubc.ubyssey.main;
 
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.squareup.picasso.Picasso;
 
+import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Article;
 import ca.ubc.ubyssey.view.ViewHelper;
@@ -38,6 +40,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     private TextView mArticleImageCaption;
     private TextView mArticleTitle;
     private TextView mArticleAuthor;
+    private TextView mArticleDate;
     private TextView mArticleContent;
     private ObservableScrollView mArticleScrollView;
     private int mParallaxImageHeight;
@@ -51,8 +54,6 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary_blue)));
-        mToolbar.setTitleTextColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.white)));
 
         Intent intent = getIntent();
         Article selectedArticle = (Article) intent.getSerializableExtra(ARTICLE_KEY);
@@ -64,12 +65,21 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleImageCaption.setText(selectedArticle.featured_image.caption);
 
         mArticleTitle = (TextView) findViewById(R.id.article_title);
+        Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
+        mArticleTitle.setTypeface(titleTypeFace);
         mArticleTitle.setText(selectedArticle.long_headline);
 
         mArticleAuthor = (TextView) findViewById(R.id.article_author);
+        Typeface metaTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Bold.otf");
+        mArticleAuthor.setTypeface(metaTypeFace);
         mArticleAuthor.setText("By " + selectedArticle.authors[0].full_name);
 
+        mArticleDate = (TextView) findViewById(R.id.article_date);
+        mArticleDate.setText("·" + DateUtils.getProperDateString(selectedArticle.published_at));
+
         mArticleContent = (TextView) findViewById(R.id.article_content);
+        Typeface contentTypeFace = Typeface.createFromAsset(getAssets(), "fonts/DroidSerif-Regular.ttf");
+        mArticleContent.setTypeface(contentTypeFace);
         mArticleContent.setText(Html.fromHtml(selectedArticle.content));
 
         mArticleScrollView = (ObservableScrollView) findViewById(R.id.article_scrollview);
@@ -108,11 +118,6 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        int primaryColor = getResources().getColor(R.color.primary_blue);
-        int whiteColor = getResources().getColor(R.color.white);
-        float alpha = 1 - (float) Math.max(0, mParallaxImageHeight - scrollY) / mParallaxImageHeight;
-        mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, primaryColor));
-        mToolbar.setTitleTextColor(ScrollUtils.getColorWithAlpha(alpha, whiteColor));
         ViewHelper.setTranslationY(mArticleImageView, scrollY / 2);
     }
 

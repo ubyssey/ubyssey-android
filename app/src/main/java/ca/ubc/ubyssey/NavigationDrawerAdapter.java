@@ -11,6 +11,8 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.ubc.ubyssey.models.DrawerItem;
+
 
 /**
  * Adapter for the navigator drawer list view
@@ -21,10 +23,10 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 
     private Context mContext;
-    private List<AbstractMap.SimpleEntry<String, Integer>> mMenuItems;
+    private List<DrawerItem> mMenuItems;
     private LayoutInflater mLayoutInflater = null;
 
-    public NavigationDrawerAdapter(Context context, List<AbstractMap.SimpleEntry<String, Integer>> menuItems) {
+    public NavigationDrawerAdapter(Context context, List<DrawerItem> menuItems) {
         mContext = context;
         mMenuItems = menuItems;
         mLayoutInflater = LayoutInflater.from(context);
@@ -48,14 +50,21 @@ public class NavigationDrawerAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        DrawerItem menuItem = mMenuItems.get(position);
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+            if (menuItem.isSection()) {
+                convertView = mLayoutInflater.inflate(R.layout.drawer_list_section_item, parent, false);
+                convertView.setOnClickListener(null);
+                convertView.setOnLongClickListener(null);
+                convertView.setLongClickable(false);
+
+            } else {
+                convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+            }
         }
 
-        Map.Entry<String, Integer> menuItem = mMenuItems.get(position);
-
         TextView menuTextView = (TextView) convertView.findViewById(R.id.menu_item_text);
-        menuTextView.setText(menuItem.getKey());
+        menuTextView.setText(menuItem.getTitle());
 
         return convertView;
     }

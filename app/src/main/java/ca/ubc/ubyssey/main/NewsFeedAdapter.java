@@ -1,6 +1,7 @@
 package ca.ubc.ubyssey.main;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
+import ca.ubc.ubyssey.Utils;
 import ca.ubc.ubyssey.models.Article;
 
 /**
@@ -26,11 +29,16 @@ public class NewsFeedAdapter extends BaseAdapter {
     private Context mContext;
     private List<Article> mArticles;
     private LayoutInflater mLayoutInflater = null;
+    private Typeface mHeadlineTypeface;
+    private Typeface mMetaTypeface;
 
     public NewsFeedAdapter(Context context, List<Article> articles) {
         mContext = context;
         mArticles = articles;
         mLayoutInflater = LayoutInflater.from(context);
+
+        mHeadlineTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/LFT_Etica_Book.otf");
+        mMetaTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/LFT_Etica_Light.otf");
     }
 
     @Override
@@ -68,10 +76,14 @@ public class NewsFeedAdapter extends BaseAdapter {
 
         Article article = mArticles.get(position);
         viewHolder.newsHeadline.setText(article.long_headline);
+        viewHolder.newsHeadline.setTypeface(mHeadlineTypeface);
         viewHolder.newsSectionTextView.setText(article.section);
-        viewHolder.newsTimestampTextView.setText(article.published_at);
+        viewHolder.newsSectionTextView.setTypeface(mMetaTypeface);
+        viewHolder.newsTimestampTextView.setText(DateUtils.getProperDateString(article.published_at));
+        viewHolder.newsTimestampTextView.setTypeface(mMetaTypeface);
+        viewHolder.newsReadTimeTextView.setTypeface(mMetaTypeface);
 
-        if (article.importance == 1 && position != 0) {
+        if (article.importance > 3 && position != 0) {
             viewHolder.newsImageView.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load(article.featured_image.image.url).fit().centerCrop().into(viewHolder.newsImageView);
         } else {

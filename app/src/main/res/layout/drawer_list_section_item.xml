@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/drawer_list_item_background"
+    android:background="@color/drawer_heading_gray"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="15dp"
@@ -10,9 +10,11 @@
 
     <TextView
         android:id="@+id/menu_item_text"
-        android:textSize="23sp"
+        android:textSize="18sp"
+        android:textAllCaps="true"
         android:fontFamily="sans-serif"
-        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textColor="@color/drawer_text_gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -6,5 +6,10 @@
     <color name="primary_blue">#0071c9</color>
     <color name="dark_blue">#194D6A</color>
     <color name="dark_gray">#333</color>
-
+    <color name="light_gray">#ffaeaeae</color>
+    <color name="drawer_dark_gray">#212121</color>
+    <color name="drawer_gray">#ff343434</color>
+    <color name="drawer_text_gray">#6a6a6a</color>
+    <color name="drawer_heading_gray">#303030</color>
+    <color name="primary_green">#689138</color>
 </resources>

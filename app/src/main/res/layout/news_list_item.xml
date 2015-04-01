@@ -7,44 +7,25 @@
     <ImageView
         android:id="@+id/news_image"
         android:layout_width="match_parent"
-        android:layout_height="180dp" />
+        android:layout_height="150dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="ltr"
-        android:background="@color/white"
+        android:background="@drawable/news_list_item_background"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:paddingTop="25dp"
         android:paddingBottom="25dp">
 
         <TextView
-            android:id="@+id/section_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_blue"
-            android:textSize="11sp"
-            android:textAllCaps="true" />
-
-        <TextView
-            android:id="@+id/time_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/light_black"
-            android:textSize="11sp"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/section_label" />
-
-        <TextView
             android:id="@+id/headline_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:layout_marginTop="13dp"
-            android:layout_below="@+id/section_label"
-            android:textSize="21sp"
-            android:fontFamily="sans-serif-light" />
+            android:textSize="22sp"
+            android:maxLines="2"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/read_label"
@@ -54,7 +35,30 @@
             android:layout_marginTop="13dp"
             android:layout_below="@+id/headline_label"
             android:text="8 minute read"
-            android:fontFamily="sans-serif" />
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/section_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_blue"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="13dp"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:layout_below="@+id/headline_label"
+            android:layout_toRightOf="@+id/read_label"/>
+
+        <TextView
+            android:id="@+id/time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_black"
+            android:textSize="13sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/headline_label"
+            android:layout_toRightOf="@+id/section_label" />
 
     </RelativeLayout>
 

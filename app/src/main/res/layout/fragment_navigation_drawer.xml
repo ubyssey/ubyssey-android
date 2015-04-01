@@ -2,22 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
-
-    <RelativeLayout
-        android:id="@+id/menu_header"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:layoutDirection="ltr"
-        android:background="@color/primary_blue">
-
-        <ImageView
-            android:src="@drawable/ubyssey_large_logo"
-            android:layout_marginLeft="20dp"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
+    android:background="@color/drawer_gray">
 
     <ListView
         android:layout_width="match_parent"

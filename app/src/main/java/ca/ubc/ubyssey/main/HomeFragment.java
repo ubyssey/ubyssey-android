@@ -55,22 +55,23 @@ public class HomeFragment extends Fragment {
         GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(TEST_URL, Articles.class, null, new Response.Listener<Articles>() {
             @Override
             public void onResponse(Articles response) {
-                Article firstArticle = response.results.get(0);
-                Picasso.with(getActivity()).load(firstArticle.featured_image.image.url).fit().centerCrop().into(mNewsImageView);
-                mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
-                mNewsListView.addHeaderView(mNewsHeaderView, null, false);
-                mNewsListView.setAdapter(mNewsAdapter);
+                if (isAdded() && getActivity() != null) {
+                    Article firstArticle = response.results.get(0);
+                    Picasso.with(getActivity()).load(firstArticle.featured_image.image.url).fit().centerCrop().into(mNewsImageView);
+                    mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
+                    mNewsListView.addHeaderView(mNewsHeaderView, null, false);
+                    mNewsListView.setAdapter(mNewsAdapter);
 
-                mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Article selectedArticle = (Article) mNewsAdapter.getItem(position - 1);
-                        Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
-                        articleIntent.putExtra(ArticleActivity.ARTICLE_KEY, selectedArticle);
-                        startActivity(articleIntent);
-                    }
-                });
-
+                    mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Article selectedArticle = (Article) mNewsAdapter.getItem(position - 1);
+                            Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
+                            articleIntent.putExtra(ArticleActivity.ARTICLE_KEY, selectedArticle);
+                            startActivity(articleIntent);
+                        }
+                    });
+                }
             }
         }, new Response.ErrorListener() {
             @Override

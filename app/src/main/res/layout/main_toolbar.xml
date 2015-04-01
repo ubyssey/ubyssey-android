@@ -9,9 +9,10 @@
     android:background="@drawable/top_shadow_gradient">
 
     <ImageView
+        android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:src="@drawable/ubyssey_logo" />
 
 

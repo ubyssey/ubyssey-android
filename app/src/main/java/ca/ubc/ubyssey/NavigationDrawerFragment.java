@@ -3,6 +3,7 @@ package ca.ubc.ubyssey;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -16,12 +17,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.ubc.ubyssey.models.DrawerItem;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -97,31 +102,39 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView = (ListView) view.findViewById(R.id.menu_listview);
 
+        View addTopic = inflater.inflate(R.layout.add_topic_button, null);
+        mDrawerListView.addFooterView(addTopic, null, false);
+
         mDrawerAdapter = new NavigationDrawerAdapter(getActivity(), createMenuItems());
         mDrawerListView.setAdapter(mDrawerAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AbstractMap.SimpleEntry<String, Integer> menuItem = (AbstractMap.SimpleEntry<String, Integer>) mDrawerAdapter.getItem(position);
-                mCallbacks.onNavigationDrawerItemSelected(menuItem.getValue());
-                mDrawerLayout.closeDrawer(mFragmentContainerView);
+                DrawerItem menuItem = (DrawerItem) mDrawerAdapter.getItem(position);
+                if (menuItem != null) {
+                    mCallbacks.onNavigationDrawerItemSelected(menuItem.getTag());
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
             }
         });
         return view;
     }
 
-    private List<AbstractMap.SimpleEntry<String, Integer>> createMenuItems() {
+    private List<DrawerItem> createMenuItems() {
 
-        ArrayList<AbstractMap.SimpleEntry<String, Integer>> menuItems = new ArrayList<>();
-        menuItems.add(new AbstractMap.SimpleEntry<>("Home", MainActivity.HOME_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Culture", MainActivity.CULTURE_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Opinion", MainActivity.OPINION_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Features", MainActivity.FEATURES_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Data", MainActivity.DATA_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Sports", MainActivity.SPORTS_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Video", MainActivity.VIDEO_ITEM));
-        menuItems.add(new AbstractMap.SimpleEntry<>("Blog", MainActivity.BLOG_ITEM));
+        ArrayList<DrawerItem> menuItems = new ArrayList<>();
+        menuItems.add(new DrawerItem(true, "Sections"));
+        menuItems.add(new DrawerItem("Home", MainActivity.HOME_ITEM));
+        menuItems.add(new DrawerItem("Culture", MainActivity.CULTURE_ITEM));
+        menuItems.add(new DrawerItem("Opinion", MainActivity.OPINION_ITEM));
+        menuItems.add(new DrawerItem("Features", MainActivity.FEATURES_ITEM));
+        menuItems.add(new DrawerItem("Data", MainActivity.DATA_ITEM));
+        menuItems.add(new DrawerItem("Sports", MainActivity.SPORTS_ITEM));
+        menuItems.add(new DrawerItem("Video", MainActivity.VIDEO_ITEM));
+        menuItems.add(new DrawerItem("Blog", MainActivity.BLOG_ITEM));
+        menuItems.add(new DrawerItem(true, "Saved Topics"));
+
         return menuItems;
     }
 
@@ -131,19 +144,14 @@ public class NavigationDrawerFragment extends Fragment {
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
+     *  @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
+     * @param mainLayout
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar, final RelativeLayout mainLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-
-
+        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -180,6 +188,14 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                mainLayout.setTranslationX(slideOffset * drawerView.getWidth());
+                mDrawerLayout.bringChildToFront(drawerView);
+                mDrawerLayout.requestLayout();
             }
         };
 

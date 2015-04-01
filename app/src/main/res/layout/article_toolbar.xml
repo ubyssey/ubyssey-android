@@ -6,4 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/primary_blue" />
+    android:background="@color/primary_blue">
+
+
+    <ImageView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:gravity="center_horizontal"
+        android:src="@drawable/ubyssey_article_logo" />
+
+</android.support.v7.widget.Toolbar>
