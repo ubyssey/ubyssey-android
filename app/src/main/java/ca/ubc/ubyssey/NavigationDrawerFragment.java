@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,8 @@ import ca.ubc.ubyssey.models.DrawerItem;
  * Created by Chris Li on 3/16/2015.
  */
 public class NavigationDrawerFragment extends Fragment {
+
+    private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
     /**
      * Remember the position of the selected item.
@@ -102,9 +105,6 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView = (ListView) view.findViewById(R.id.menu_listview);
 
-        View addTopic = inflater.inflate(R.layout.add_topic_button, null);
-        mDrawerListView.addFooterView(addTopic, null, false);
-
         mDrawerAdapter = new NavigationDrawerAdapter(getActivity(), createMenuItems());
         mDrawerListView.setAdapter(mDrawerAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -118,6 +118,16 @@ public class NavigationDrawerFragment extends Fragment {
                 }
             }
         });
+
+        View addTopic = inflater.inflate(R.layout.add_topic_button, null);
+        mDrawerListView.addFooterView(addTopic, null, false);
+        addTopic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         return view;
     }
 

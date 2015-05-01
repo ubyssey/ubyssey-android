@@ -34,12 +34,14 @@ public class DateUtils {
         cal.setTime(date);
         int dayOf = cal.get(Calendar.DAY_OF_WEEK);
         int weekOf = cal.get(Calendar.WEEK_OF_MONTH);
+        int monthOf = cal.get(Calendar.MONTH);
         SimpleDateFormat time = new SimpleDateFormat("h:mm a");
         String currentTime = time.format(cal.getTime());
         Calendar curr = Calendar.getInstance();
         int currDay = curr.get(Calendar.DAY_OF_WEEK);
         int currWeek = curr.get(Calendar.WEEK_OF_MONTH);
-        if (weekOf == currWeek) {
+        int currMonth = curr.get(Calendar.MONTH);
+        if (weekOf == currWeek && monthOf == currMonth) {
             if (dayOf == currDay) {
                 return "Today" + " " + currentTime;
             } else if (dayOf == Calendar.SUNDAY) {
@@ -58,10 +60,8 @@ public class DateUtils {
                 return "Saturday" + " " + currentTime;
             }
         } else {
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
             int year = cal.get(Calendar.YEAR);
-            return getMonth(month) + " " + day + ", " + year;
+            return getMonth(monthOf) + " " + dayOf + ", " + year;
         }
     }
 

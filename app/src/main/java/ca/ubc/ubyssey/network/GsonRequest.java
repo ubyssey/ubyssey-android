@@ -7,10 +7,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+
+import ca.ubc.ubyssey.models.Content;
+import ca.ubc.ubyssey.models.Data;
+import ca.ubc.ubyssey.models.DataTypeAdapter;
 
 /**
  * Request class that uses Gson to map data back to the model objects
@@ -18,7 +23,7 @@ import java.util.Map;
  * Created by Chris Li on 3/16/2015.
  */
 public class GsonRequest<T> extends Request<T> {
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Data.class, new DataTypeAdapter()).create();
     private final Class<T> clazz;
     private final Map<String, String> headers;
     private final Response.Listener<T> listener;

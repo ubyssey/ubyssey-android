@@ -2,15 +2,20 @@ package ca.ubc.ubyssey.main;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
@@ -22,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Article;
+import ca.ubc.ubyssey.models.Content;
 import ca.ubc.ubyssey.view.ViewHelper;
 
 
@@ -41,9 +47,10 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     private TextView mArticleTitle;
     private TextView mArticleAuthor;
     private TextView mArticleDate;
-    private TextView mArticleContent;
+    private LinearLayout mArticleContent;
     private ObservableScrollView mArticleScrollView;
-    private int mParallaxImageHeight;
+
+    private Article mSelectedArticle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,36 +63,35 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        Article selectedArticle = (Article) intent.getSerializableExtra(ARTICLE_KEY);
+
+        if (intent != null) {
+            mSelectedArticle = (Article) intent.getSerializableExtra(ARTICLE_KEY);
+        }
 
         mArticleImageView = (ImageView) findViewById(R.id.article_image);
-        Picasso.with(this).load(selectedArticle.featured_image.image.url).fit().centerCrop().into(mArticleImageView);
+        Picasso.with(this).load(mSelectedArticle.featured_image.image.url).fit().centerCrop().into(mArticleImageView);
 
         mArticleImageCaption = (TextView) findViewById(R.id.article_image_caption);
-        mArticleImageCaption.setText(selectedArticle.featured_image.caption);
+        mArticleImageCaption.setText(mSelectedArticle.featured_image.caption);
 
         mArticleTitle = (TextView) findViewById(R.id.article_title);
         Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
         mArticleTitle.setTypeface(titleTypeFace);
-        mArticleTitle.setText(selectedArticle.long_headline);
+        mArticleTitle.setText(mSelectedArticle.long_headline);
 
         mArticleAuthor = (TextView) findViewById(R.id.article_author);
         Typeface metaTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Bold.otf");
         mArticleAuthor.setTypeface(metaTypeFace);
-        mArticleAuthor.setText("By " + selectedArticle.authors[0].full_name);
+        mArticleAuthor.setText("By " + mSelectedArticle.authors[0].full_name);
 
         mArticleDate = (TextView) findViewById(R.id.article_date);
-        mArticleDate.setText("·" + DateUtils.getProperDateString(selectedArticle.published_at));
+        mArticleDate.setText("·" + DateUtils.getProperDateString(mSelectedArticle.published_at));
 
-        mArticleContent = (TextView) findViewById(R.id.article_content);
-        Typeface contentTypeFace = Typeface.createFromAsset(getAssets(), "fonts/DroidSerif-Regular.ttf");
-        mArticleContent.setTypeface(contentTypeFace);
-        mArticleContent.setText(Html.fromHtml(selectedArticle.content));
+        mArticleContent = (LinearLayout) findViewById(R.id.article_content);
+        buildArticle();
 
         mArticleScrollView = (ObservableScrollView) findViewById(R.id.article_scrollview);
         mArticleScrollView.setScrollViewCallbacks(this);
-
-        mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.parallax_image_height);
 
     }
 
@@ -130,4 +136,43 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 
     }
+
+    private void buildArticle(){
+
+        Content[] contents = mSelectedArticle.content;
+        Typeface contentTypeFace = Typeface.createFromAsset(getAssets(), "fonts/DroidSerif-Regular.ttf");
+        LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        paragraphLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+        LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.article_image_height));
+        imageLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+
+        for (final Content content : contents) {
+
+            if (content.type.equals("paragraph")) {
+                TextView paragraph = new TextView(this);
+                paragraph.setLayoutParams(paragraphLayoutParams);
+                paragraph.setTextColor(Color.BLACK);
+                paragraph.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+                paragraph.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8.0f,  getResources().getDisplayMetrics()), 1.0f);
+                paragraph.setTypeface(contentTypeFace);
+                paragraph.setText(Html.fromHtml(content.data.paragraph));
+                mArticleContent.addView(paragraph);
+            } else if (content.type.equals("image")) {
+                final ImageView image = new ImageView(this);
+                image.setLayoutParams(imageLayoutParams);
+                mArticleContent.addView(image);
+                Picasso.with(this).load(content.data.url).fit().centerCrop().into(image);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ArticleActivity.this, ImageActivity.class);
+                        intent.putExtra(ImageActivity.URL_KEY,content.data.url);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+        }
+    }
+
 }

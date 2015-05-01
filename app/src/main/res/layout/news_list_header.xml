@@ -12,7 +12,7 @@
 
     <View
         android:layout_alignBottom="@+id/main_image"
-        android:background="@drawable/bottom_image_shadow"
+        android:background="@drawable/bottom_shadow_gradient"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 </RelativeLayout>

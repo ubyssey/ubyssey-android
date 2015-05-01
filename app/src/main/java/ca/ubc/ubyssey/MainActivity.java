@@ -10,11 +10,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import ca.ubc.ubyssey.main.HomeFragment;
+import ca.ubc.ubyssey.main.FeedFragment;
 
 /**
  * Main Controller for the application data. Determines which fragment to show
@@ -71,11 +69,11 @@ public class MainActivity extends ActionBarActivity
 
         switch (value) {
             case HOME_ITEM:
-                fragmentTransaction.replace(R.id.container, HomeFragment.newInstance()).commit();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(HOME_ITEM)).commit();
                 break;
 
             case CULTURE_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(CULTURE_ITEM)).commit();
                 break;
 
             case OPINION_ITEM:

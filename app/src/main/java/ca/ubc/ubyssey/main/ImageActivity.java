@@ -1,0 +1,37 @@
+package ca.ubc.ubyssey.main;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import ca.ubc.ubyssey.R;
+import ca.ubc.ubyssey.models.Article;
+import uk.co.senab.photoview.PhotoViewAttacher;
+
+/**
+ * Created by Chris Li on 4/30/2015.
+ */
+public class ImageActivity extends ActionBarActivity {
+
+    public static String URL_KEY = "url";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image);
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            String url = intent.getStringExtra(URL_KEY);
+            Picasso.with(this).load(url).fit().centerCrop().into(imageView);
+        }
+
+        PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
+
+    }
+}

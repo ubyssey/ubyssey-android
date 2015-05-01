@@ -32,6 +32,17 @@
                 android:value=".MainActivity" />
 
         </activity>
+
+        <activity
+            android:name=".main.ImageActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".main.ArticleActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.ArticleActivity" />
+
+        </activity>
     </application>
 
 </manifest>

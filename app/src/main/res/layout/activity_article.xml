@@ -75,11 +75,9 @@
                 android:id="@+id/article_date" />
 
 
-            <TextView
+            <LinearLayout
+                android:orientation="vertical"
                 android:background="@color/white"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:lineSpacingExtra="8dp"
                 android:layout_below="@+id/article_author"
                 android:paddingBottom="10dp"
                 android:paddingLeft="30dp"

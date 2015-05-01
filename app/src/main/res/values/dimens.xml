@@ -6,9 +6,12 @@
     <dimen name="article_horizontal_margin">20dp</dimen>
     <dimen name="article_vertical_margin">30dp</dimen>
 
+    <dimen name="extra_padding">10dp</dimen>
+
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">230dp</dimen>
     <dimen name="parallax_image_height">250dp</dimen>
     <dimen name="main_toolbar_height">35dp</dimen>
+    <dimen name="article_image_height">175dp</dimen>
 </resources>

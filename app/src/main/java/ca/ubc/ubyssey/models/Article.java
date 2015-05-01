@@ -12,7 +12,7 @@ public class Article implements Serializable {
     public String long_headline;
     public String short_headline;
     public FeaturedImage featured_image;
-    public String content;
+    public Content[] content;
     public Author[] authors;
     public String section;
     public String published_at;

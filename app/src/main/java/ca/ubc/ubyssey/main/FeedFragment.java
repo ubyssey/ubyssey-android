@@ -3,6 +3,7 @@ package ca.ubc.ubyssey.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,18 @@ import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.github.ksoichiro.android.observablescrollview.ObservableListView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.squareup.picasso.Picasso;
 
+import ca.ubc.ubyssey.MainActivity;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Article;
 import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.network.GsonRequest;
 import ca.ubc.ubyssey.network.RequestManager;
+import ca.ubc.ubyssey.view.ViewHelper;
 
 /**
  * Fragment used to display the news list.
@@ -26,20 +32,25 @@ import ca.ubc.ubyssey.network.RequestManager;
  * <p/>
  * Created by Chris Li on 3/16/2015.
  */
-public class HomeFragment extends Fragment {
+public class FeedFragment extends Fragment implements ObservableScrollViewCallbacks{
 
-    private static final String TEST_URL = "http://petersiemens.com/dispatch/api/articles.json";
-
+    private static final String TAG = FeedFragment.class.getSimpleName();
+    private static final String CATEGORY_KEY = "category";
 
     private View mNewsHeaderView;
     private ImageView mNewsImageView;
-    private ListView mNewsListView;
+    private ObservableListView mNewsListView;
     private NewsFeedAdapter mNewsAdapter;
 
     private RequestManager mRequestManager;
 
-    public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
+    public static FeedFragment newInstance(int category) {
+        FeedFragment fragment = new FeedFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(CATEGORY_KEY, category);
+        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -47,14 +58,21 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         mNewsHeaderView = inflater.inflate(R.layout.news_list_header, null);
         mNewsImageView = (ImageView) mNewsHeaderView.findViewById(R.id.main_image);
-        mNewsListView = (ListView) view.findViewById(R.id.news_listview);
-        GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(TEST_URL, Articles.class, null, new Response.Listener<Articles>() {
+
+        mNewsListView = (ObservableListView) view.findViewById(R.id.news_listview);
+        mNewsListView.setScrollViewCallbacks(this);
+
+        Bundle bundle = getArguments();
+        int category = bundle.getInt(CATEGORY_KEY,0);
+
+        GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(getFeedUrl(category), Articles.class, null, new Response.Listener<Articles>() {
             @Override
             public void onResponse(Articles response) {
+
                 if (isAdded() && getActivity() != null) {
                     Article firstArticle = response.results.get(0);
                     Picasso.with(getActivity()).load(firstArticle.featured_image.image.url).fit().centerCrop().into(mNewsImageView);
@@ -76,7 +94,7 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.i(TAG, error.toString());
             }
         });
 
@@ -86,4 +104,35 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    private String getFeedUrl(int category) {
+
+        String url = "";
+        switch (category) {
+
+            case MainActivity.HOME_ITEM:
+                url = "http://dev.ubyssey.ca/api/articles/";
+                break;
+            case MainActivity.CULTURE_ITEM:
+                url = "http://petersiemens.com/dispatch/api/articles.json";
+                break;
+        }
+
+
+        return url;
+    }
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        ViewHelper.setTranslationY(mNewsHeaderView, scrollY / 2);
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+    }
 }
