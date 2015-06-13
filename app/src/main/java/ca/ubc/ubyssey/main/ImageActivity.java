@@ -8,7 +8,9 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import ca.ubc.ubyssey.R;
-import ca.ubc.ubyssey.models.Article;
+import ca.ubc.ubyssey.models.Data;
+import ca.ubc.ubyssey.network.RequestBuilder;
+import de.greenrobot.event.EventBus;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -16,7 +18,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class ImageActivity extends ActionBarActivity {
 
-    public static String URL_KEY = "url";
+    public static final String URL_KEY = "url";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +26,11 @@ public class ImageActivity extends ActionBarActivity {
         setContentView(R.layout.activity_image);
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
-        Intent intent = getIntent();
-
-        if (intent != null) {
-            String url = intent.getStringExtra(URL_KEY);
-            Picasso.with(this).load(url).fit().centerCrop().into(imageView);
-        }
+        Data imageData = EventBus.getDefault().removeStickyEvent(Data.class);
+        Picasso.with(this).load(RequestBuilder.URL_PREFIX + imageData.url).fit().centerCrop().into(imageView);
 
         PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
+        attacher.setZoomable(true);
 
     }
 }

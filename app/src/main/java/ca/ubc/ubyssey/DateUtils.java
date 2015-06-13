@@ -1,5 +1,7 @@
 package ca.ubc.ubyssey;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +15,8 @@ import java.util.TimeZone;
  */
 public class DateUtils {
 
+    private static final String TAG = DateUtils.class.getSimpleName();
+
     public static Date getFormattedDate(String date) {
 
         TimeZone timezone = TimeZone.getTimeZone("America/Los_Angeles");
@@ -22,7 +26,7 @@ public class DateUtils {
         try {
             cal.setTime(sdf.parse(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.toString());
         }
         Date formattedDate = cal.getTime();
 

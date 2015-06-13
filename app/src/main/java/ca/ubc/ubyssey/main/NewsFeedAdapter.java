@@ -2,6 +2,7 @@ package ca.ubc.ubyssey.main;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,8 @@ import java.util.List;
 
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
-import ca.ubc.ubyssey.Utils;
-import ca.ubc.ubyssey.models.Article;
+import ca.ubc.ubyssey.models.Articles;
+import ca.ubc.ubyssey.network.RequestBuilder;
 
 /**
  * Adapter class to show the news feed items
@@ -25,14 +26,15 @@ import ca.ubc.ubyssey.models.Article;
  */
 public class NewsFeedAdapter extends BaseAdapter {
 
+    private static final String TAG = NewsFeedAdapter.class.getSimpleName();
 
     private Context mContext;
-    private List<Article> mArticles;
+    private Articles.Article[] mArticles;
     private LayoutInflater mLayoutInflater = null;
     private Typeface mHeadlineTypeface;
     private Typeface mMetaTypeface;
 
-    public NewsFeedAdapter(Context context, List<Article> articles) {
+    public NewsFeedAdapter(Context context, Articles.Article[] articles) {
         mContext = context;
         mArticles = articles;
         mLayoutInflater = LayoutInflater.from(context);
@@ -43,12 +45,12 @@ public class NewsFeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mArticles.size();
+        return mArticles.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return mArticles.get(position);
+        return mArticles[position];
     }
 
     @Override
@@ -74,10 +76,10 @@ public class NewsFeedAdapter extends BaseAdapter {
             viewHolder = (NewsItemViewHolder) convertView.getTag();
         }
 
-        Article article = mArticles.get(position);
+        Articles.Article article = mArticles[position];
         viewHolder.newsHeadline.setText(article.long_headline);
         viewHolder.newsHeadline.setTypeface(mHeadlineTypeface);
-        viewHolder.newsSectionTextView.setText(article.section);
+        viewHolder.newsSectionTextView.setText(article.section.name);
         viewHolder.newsSectionTextView.setTypeface(mMetaTypeface);
         viewHolder.newsTimestampTextView.setText(DateUtils.getProperDateString(article.published_at));
         viewHolder.newsTimestampTextView.setTypeface(mMetaTypeface);
@@ -85,7 +87,7 @@ public class NewsFeedAdapter extends BaseAdapter {
 
         if (article.importance > 3 && position != 0) {
             viewHolder.newsImageView.setVisibility(View.VISIBLE);
-            Picasso.with(mContext).load(article.featured_image.image.url).fit().centerCrop().into(viewHolder.newsImageView);
+            Picasso.with(mContext).load(RequestBuilder.URL_PREFIX + article.featured_image.url).fit().centerCrop().into(viewHolder.newsImageView);
         } else {
             viewHolder.newsImageView.setVisibility(View.GONE);
         }

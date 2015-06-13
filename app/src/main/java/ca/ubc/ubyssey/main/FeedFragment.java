@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,11 +19,12 @@ import com.squareup.picasso.Picasso;
 
 import ca.ubc.ubyssey.MainActivity;
 import ca.ubc.ubyssey.R;
-import ca.ubc.ubyssey.models.Article;
 import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.network.GsonRequest;
+import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.network.RequestManager;
 import ca.ubc.ubyssey.view.ViewHelper;
+import de.greenrobot.event.EventBus;
 
 /**
  * Fragment used to display the news list.
@@ -74,8 +74,8 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
             public void onResponse(Articles response) {
 
                 if (isAdded() && getActivity() != null) {
-                    Article firstArticle = response.results.get(0);
-                    Picasso.with(getActivity()).load(firstArticle.featured_image.image.url).fit().centerCrop().into(mNewsImageView);
+                    Articles.Article firstArticle = response.results[0];
+                    Picasso.with(getActivity()).load(RequestBuilder.URL_PREFIX + firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
                     mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
                     mNewsListView.addHeaderView(mNewsHeaderView, null, false);
                     mNewsListView.setAdapter(mNewsAdapter);
@@ -83,9 +83,14 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                     mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Article selectedArticle = (Article) mNewsAdapter.getItem(position - 1);
+                            Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1);
+
+                            if (position < mNewsAdapter.getCount()) {
+                                selectedArticle.setNextArticle((Articles.Article) mNewsAdapter.getItem(position));
+                            }
+
                             Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
-                            articleIntent.putExtra(ArticleActivity.ARTICLE_KEY, selectedArticle);
+                            EventBus.getDefault().postSticky(selectedArticle);
                             startActivity(articleIntent);
                         }
                     });
@@ -110,10 +115,10 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         switch (category) {
 
             case MainActivity.HOME_ITEM:
-                url = "http://dev.ubyssey.ca/api/articles/";
+                url = "http://dev.ubyssey.ca/api/frontpage/";
                 break;
             case MainActivity.CULTURE_ITEM:
-                url = "http://petersiemens.com/dispatch/api/articles.json";
+                url = "http://dev.ubyssey.ca/api/articles/";
                 break;
         }
 

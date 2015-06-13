@@ -50,6 +50,9 @@ public class DataTypeAdapter extends TypeAdapter<Data> {
                 }
             }
             in.endObject();
+        } else if (token.equals(JsonToken.NULL)) {
+            in.nextNull();
+            return null;
         }
 
         return data;

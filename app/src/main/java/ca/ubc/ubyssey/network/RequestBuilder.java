@@ -5,7 +5,7 @@ package ca.ubc.ubyssey.network;
  */
 public class RequestBuilder {
 
-
+    public static final String URL_PREFIX = "http://dev.ubyssey.ca";
 
 
 }

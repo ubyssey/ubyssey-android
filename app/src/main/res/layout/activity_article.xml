@@ -25,11 +25,13 @@
             <TextView
                 android:background="@drawable/bottom_shadow_gradient"
                 android:layout_alignBottom="@+id/article_image"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
-                android:layout_height="65dp"
+                android:layout_height="75dp"
                 android:textColor="@color/white"
                 android:id="@+id/article_image_caption" />
 
@@ -80,18 +82,10 @@
                 android:background="@color/white"
                 android:layout_below="@+id/article_author"
                 android:paddingBottom="10dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/article_content" />
-
-
-            <include layout="@layout/custom_separator"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_below="@+id/article_content"/>
 
         </RelativeLayout>
 
