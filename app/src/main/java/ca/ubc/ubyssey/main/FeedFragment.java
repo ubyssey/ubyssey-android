@@ -74,6 +74,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
             public void onResponse(Articles response) {
 
                 if (isAdded() && getActivity() != null) {
+                    response.setupNextArticles();
                     Articles.Article firstArticle = response.results[0];
                     Picasso.with(getActivity()).load(RequestBuilder.URL_PREFIX + firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
                     mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
@@ -83,12 +84,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                     mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1);
-
-                            if (position < mNewsAdapter.getCount()) {
-                                selectedArticle.setNextArticle((Articles.Article) mNewsAdapter.getItem(position));
-                            }
-
+                            Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1); //
                             Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
                             EventBus.getDefault().postSticky(selectedArticle);
                             startActivity(articleIntent);

@@ -1,5 +1,6 @@
 package ca.ubc.ubyssey.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -16,7 +17,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * Created by Chris Li on 4/30/2015.
  */
-public class ImageActivity extends ActionBarActivity {
+public class ImageActivity extends Activity {
 
     public static final String URL_KEY = "url";
 
@@ -27,7 +28,7 @@ public class ImageActivity extends ActionBarActivity {
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
         Data imageData = EventBus.getDefault().removeStickyEvent(Data.class);
-        Picasso.with(this).load(RequestBuilder.URL_PREFIX + imageData.url).fit().centerCrop().into(imageView);
+        Picasso.with(this).load(RequestBuilder.URL_PREFIX + imageData.url).into(imageView);
 
         PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
         attacher.setZoomable(true);

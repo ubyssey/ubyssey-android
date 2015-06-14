@@ -21,7 +21,7 @@ public class DateUtils {
 
         TimeZone timezone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar cal = Calendar.getInstance(timezone);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         sdf.setCalendar(cal);
         try {
             cal.setTime(sdf.parse(date));

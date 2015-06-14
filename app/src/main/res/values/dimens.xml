@@ -13,6 +13,6 @@
     <dimen name="navigation_drawer_width">230dp</dimen>
     <dimen name="parallax_image_height">250dp</dimen>
     <dimen name="main_toolbar_height">35dp</dimen>
-    <dimen name="article_image_height">185dp</dimen>
+    <dimen name="parallax_inner_image_height">300dp</dimen>
     <dimen name="text_padding">30dp</dimen>
 </resources>

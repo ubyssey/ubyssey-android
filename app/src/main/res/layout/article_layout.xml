@@ -4,14 +4,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <FrameLayout
+            android:id="@+id/article_image_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/parallax_image_height"
-            android:id="@+id/article_image" />
+            android:layout_height="@dimen/parallax_image_height">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/parallax_inner_image_height"
+                android:id="@+id/article_image" />
+        </FrameLayout>
 
         <TextView
             android:background="@drawable/bottom_shadow_gradient"
-            android:layout_alignBottom="@+id/article_image"
+            android:layout_alignBottom="@+id/article_image_container"
             android:fontFamily="sans-serif-thin"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
@@ -26,7 +31,7 @@
             android:background="@color/white"
             android:textColor="@color/dark_gray"
             android:textSize="24sp"
-            android:layout_below="@+id/article_image"
+            android:layout_below="@+id/article_image_container"
             android:paddingBottom="10dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
