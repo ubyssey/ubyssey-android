@@ -28,7 +28,7 @@ public class ImageActivity extends Activity {
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
         Data imageData = EventBus.getDefault().removeStickyEvent(Data.class);
-        Picasso.with(this).load(RequestBuilder.URL_PREFIX + imageData.url).into(imageView);
+        Picasso.with(this).load(imageData.url).into(imageView);
 
         PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
         attacher.setZoomable(true);

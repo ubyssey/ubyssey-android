@@ -73,23 +73,27 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
             @Override
             public void onResponse(Articles response) {
 
-                if (isAdded() && getActivity() != null) {
-                    response.setupNextArticles();
-                    Articles.Article firstArticle = response.results[0];
-                    Picasso.with(getActivity()).load(RequestBuilder.URL_PREFIX + firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
-                    mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
-                    mNewsListView.addHeaderView(mNewsHeaderView, null, false);
-                    mNewsListView.setAdapter(mNewsAdapter);
+                if (response != null) {
+                    if (response.results.length > 0) {
+                        if (isAdded() && getActivity() != null) {
+                            response.setupNextArticles();
+                            Articles.Article firstArticle = response.results[0];
+                            Picasso.with(getActivity()).load(firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
+                            mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
+                            mNewsListView.addHeaderView(mNewsHeaderView, null, false);
+                            mNewsListView.setAdapter(mNewsAdapter);
 
-                    mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1); //
-                            Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
-                            EventBus.getDefault().postSticky(selectedArticle);
-                            startActivity(articleIntent);
+                            mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1); //
+                                    Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
+                                    EventBus.getDefault().postSticky(selectedArticle);
+                                    startActivity(articleIntent);
+                                }
+                            });
                         }
-                    });
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -114,7 +118,25 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                 url = "http://dev.ubyssey.ca/api/frontpage/";
                 break;
             case MainActivity.CULTURE_ITEM:
-                url = "http://dev.ubyssey.ca/api/articles/";
+                url = "http://dev.ubyssey.ca/api/sections/culture/frontpage/";
+                break;
+            case MainActivity.OPINION_ITEM:
+                url = "http://dev.ubyssey.ca/api/sections/opinion/frontpage/";
+                break;
+            case MainActivity.FEATURES_ITEM:
+                url = "http://dev.ubyssey.ca/api/sections/features/frontpage/";
+                break;
+            case MainActivity.DATA_ITEM:
+                url = "http://dev.ubyssey.ca/api/sections/data/frontpage/";
+                break;
+            case MainActivity.SPORTS_ITEM:
+                url = "http://dev.ubyssey.ca/api/sections/sports/frontpage/";
+                break;
+            case MainActivity.VIDEO_ITEM:
+                url = "http://dev.ubyssey.ca/api/sections/video/frontpage/";
+                break;
+            case MainActivity.BLOG_ITEM:
+                url = "http://dev.ubyssey.ca/api/sections/blog/frontpage/";
                 break;
         }
 

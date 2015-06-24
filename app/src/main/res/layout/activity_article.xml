@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/article_toolbar" />
+    <include android:id="@+id/toolbar" layout="@layout/article_toolbar" />
 
     <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+        android:layout_below="@+id/toolbar"
         android:id="@+id/article_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -91,4 +91,20 @@
 
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/previous_button"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:drawableTop="@drawable/ic_navigation_arrow_drop_up"
+        android:background="@drawable/previous_button_background_selected"
+        android:textColor="@android:color/white"
+        android:alpha="0"
+        android:gravity="center"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="64dp"
+        android:layout_height="64dp" />
+
+</RelativeLayout>

@@ -87,7 +87,7 @@ public class NewsFeedAdapter extends BaseAdapter {
 
         if (article.importance > 3 && position != 0) {
             viewHolder.newsImageView.setVisibility(View.VISIBLE);
-            Picasso.with(mContext).load(RequestBuilder.URL_PREFIX + article.featured_image.url).fit().centerCrop().into(viewHolder.newsImageView);
+            Picasso.with(mContext).load(article.featured_image.url).fit().centerCrop().into(viewHolder.newsImageView);
         } else {
             viewHolder.newsImageView.setVisibility(View.GONE);
         }

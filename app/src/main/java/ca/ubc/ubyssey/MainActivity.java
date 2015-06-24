@@ -77,27 +77,27 @@ public class MainActivity extends ActionBarActivity
                 break;
 
             case OPINION_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(OPINION_ITEM)).commit();
                 break;
 
             case FEATURES_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(FEATURES_ITEM)).commit();
                 break;
 
             case DATA_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(DATA_ITEM)).commit();
                 break;
 
             case SPORTS_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(SPORTS_ITEM)).commit();
                 break;
 
             case VIDEO_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(VIDEO_ITEM)).commit();
                 break;
 
             case BLOG_ITEM:
-
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(BLOG_ITEM)).commit();
                 break;
 
         }

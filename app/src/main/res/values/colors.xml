@@ -6,6 +6,7 @@
     <color name="transparent_black">#be000000</color>
     <color name="primary_blue">#0071c9</color>
     <color name="dark_blue">#194D6A</color>
+    <color name="light_blue">#2196F3</color>
     <color name="dark_gray">#333</color>
     <color name="light_gray">#ffaeaeae</color>
     <color name="drawer_dark_gray">#212121</color>
