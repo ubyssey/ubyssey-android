@@ -1,6 +1,7 @@
 package ca.ubc.ubyssey;
 
 import android.annotation.TargetApi;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,11 +9,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import ca.ubc.ubyssey.main.FeedFragment;
+import ca.ubc.ubyssey.main.SearchFragment;
 
 /**
  * Main Controller for the application data. Determines which fragment to show
@@ -21,6 +29,8 @@ import ca.ubc.ubyssey.main.FeedFragment;
  */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final int HOME_ITEM = 0;
     public static final int CULTURE_ITEM = 1;
@@ -35,9 +45,10 @@ public class MainActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
+    private SearchFragment mSearchFragment;
 
     private Toolbar mToolbar;
+    private boolean mIsSearchSelected = false;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
@@ -50,6 +61,7 @@ public class MainActivity extends ActionBarActivity
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         // Set up the drawer.
@@ -118,12 +130,101 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        switch (id) {
+
+            case R.id.action_search:
+
+                final TransitionDrawable transitionDrawable = (TransitionDrawable) mToolbar.getBackground();
+                final ImageView toolbarImage = (ImageView) mToolbar.findViewById(R.id.toolbar_title);
+                final EditText toolbarSearch = (EditText) mToolbar.findViewById(R.id.search_edittext);
+                toolbarSearch.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                                (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                            if (mSearchFragment != null) {
+                                if (!toolbarSearch.getText().toString().trim().isEmpty()) {
+                                    mSearchFragment.makeSearchRequest(toolbarSearch.getText().toString().trim());
+                                } else {
+                                    mSearchFragment.showEmptyText();
+                                }
+                            }
+
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                if (!mIsSearchSelected) {
+
+                    toolbarImage.setVisibility(View.GONE);
+                    transitionDrawable.startTransition(500);
+                    toolbarSearch.setVisibility(View.VISIBLE);
+                    mNavigationDrawerFragment.setDrawerIndicatorEnabled(mIsSearchSelected, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // performs back button transition for search fragment
+                            toolbarImage.setVisibility(View.VISIBLE);
+                            transitionDrawable.reverseTransition(500);
+                            toolbarSearch.setVisibility(View.GONE);
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(!mIsSearchSelected);
+                            mNavigationDrawerFragment.setDrawerIndicatorEnabled(mIsSearchSelected, null);
+                            mNavigationDrawerFragment.toggleDrawerLock(DrawerLayout.LOCK_MODE_UNLOCKED);
+                            mIsSearchSelected = false;
+
+                            getSupportFragmentManager().popBackStackImmediate();
+
+                            // hide keyboard
+                            InputMethodManager inputManager = (InputMethodManager) getSystemService(
+                                    INPUT_METHOD_SERVICE);
+                            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                        }
+                    });
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(!mIsSearchSelected);
+                    mNavigationDrawerFragment.toggleDrawerLock(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    mIsSearchSelected = true;
+
+                    mSearchFragment = new SearchFragment();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.add(R.id.container, mSearchFragment).addToBackStack(null).commit();
+                } else {
+                    // search fragment is visible, start search queries
+                    if (mSearchFragment != null) {
+                        if (!toolbarSearch.getText().toString().trim().isEmpty()) {
+                            mSearchFragment.makeSearchRequest(toolbarSearch.getText().toString().trim());
+                        } else {
+                            mSearchFragment.showEmptyText();
+                        }
+                    }
+
+                }
+
+                return true;
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+
+        // performs back button transition for search fragment
+        if (mIsSearchSelected) {
+            mToolbar.findViewById(R.id.toolbar_title).setVisibility(View.VISIBLE);
+            ((TransitionDrawable) mToolbar.getBackground()).reverseTransition(500);
+            mToolbar.findViewById(R.id.search_edittext).setVisibility(View.GONE);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(!mIsSearchSelected);
+            mNavigationDrawerFragment.setDrawerIndicatorEnabled(mIsSearchSelected, null);
+            mNavigationDrawerFragment.toggleDrawerLock(DrawerLayout.LOCK_MODE_UNLOCKED);
+            mIsSearchSelected = false;
+        }
+
+        super.onBackPressed();
+    }
 }

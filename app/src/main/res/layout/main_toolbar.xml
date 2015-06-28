@@ -6,14 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="70dp"
-    android:background="@drawable/top_shadow_gradient">
+    android:background="@drawable/toolbar_background">
 
-    <ImageView
-        android:id="@+id/toolbar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:gravity="center_horizontal"
-        android:src="@drawable/ubyssey_logo" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/toolbar_title"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center_horizontal"
+            android:src="@drawable/ubyssey_logo" />
+
+        <EditText
+            android:id="@+id/search_edittext"
+            android:visibility="gone"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 
 </android.support.v7.widget.Toolbar>

@@ -152,6 +152,15 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+    public void setDrawerIndicatorEnabled(boolean enabled, View.OnClickListener onClickListener) {
+        mDrawerToggle.setDrawerIndicatorEnabled(enabled);
+        mDrawerToggle.setToolbarNavigationClickListener(onClickListener);
+    }
+
+    public void toggleDrawerLock(int lock){
+        mDrawerLayout.setDrawerLockMode(lock);
+    }
+
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *  @param fragmentId   The android:id of this fragment in its activity's layout.

@@ -241,7 +241,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 
-        if (scrollState == ScrollState.DOWN) {
+        /*if (scrollState == ScrollState.DOWN) {
             mPreviousButton.animate().alpha(1.0f).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -260,7 +260,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                     mPreviousButton.setVisibility(View.GONE);
                 }
             });
-        }
+        }*/
 
     }
 
