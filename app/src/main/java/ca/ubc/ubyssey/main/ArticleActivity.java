@@ -1,15 +1,12 @@
 package ca.ubc.ubyssey.main;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -42,7 +39,6 @@ import java.util.List;
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Articles;
-import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.view.ViewHelper;
 import de.greenrobot.event.EventBus;
 
@@ -97,12 +93,14 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mNextArticle = mSelectedArticle.getNextArticle();
 
         mArticleImageView = (ImageView) findViewById(R.id.article_image);
-        Picasso.with(this).load(mSelectedArticle.featured_image.url).fit().centerCrop().into(mArticleImageView);
+        mArticleImageCaption = (TextView) findViewById(R.id.article_image_caption);
+
+        if (mSelectedArticle.featured_image != null) {
+            Picasso.with(this).load(mSelectedArticle.featured_image.url).fit().centerCrop().into(mArticleImageView);
+            mArticleImageCaption.setText(mSelectedArticle.featured_image.caption);
+        }
         mFeaturedImages.add(mArticleImageView);
         mTops.add(0);
-
-        mArticleImageCaption = (TextView) findViewById(R.id.article_image_caption);
-        mArticleImageCaption.setText(mSelectedArticle.featured_image.caption);
 
         mArticleTitle = (TextView) findViewById(R.id.article_title);
         Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
@@ -133,7 +131,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
 
     }
 
-    private void addNewHeight(){
+    private void addNewHeight() {
         final ViewTreeObserver observer = mArticleScrollView.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -205,21 +203,21 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
 
                 if (i == 0) {
                     mPreviousButton.setText("top");
-                    ViewHelper.setTranslationY(mFeaturedImages.get(i), scrollY/2);
+                    ViewHelper.setTranslationY(mFeaturedImages.get(i), scrollY / 2);
                 } else {
-                    mPreviousButton.setText(String.valueOf(i+1));
+                    mPreviousButton.setText(String.valueOf(i + 1));
                     Display display = getWindowManager().getDefaultDisplay();
                     DisplayMetrics outMetrics = new DisplayMetrics();
                     display.getMetrics(outMetrics);
 
                     float screenDensity = getResources().getDisplayMetrics().density;
-                    float dpScreenHeight = outMetrics.heightPixels/screenDensity;
+                    float dpScreenHeight = outMetrics.heightPixels / screenDensity;
                     int pixelsScreenHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpScreenHeight, getResources().getDisplayMetrics());
-                    int halfPixelsScreenHeight = pixelsScreenHeight/2;
+                    int halfPixelsScreenHeight = pixelsScreenHeight / 2;
 
-                    int center = halfPixelsScreenHeight - (mFeaturedImageHeight/2);
+                    int center = halfPixelsScreenHeight - (mFeaturedImageHeight / 2);
 
-                    int[] screenLocation = {0,0};
+                    int[] screenLocation = {0, 0};
                     mFeaturedImages.get(i).getLocationOnScreen(screenLocation);
 
                     int finalLocation = ((screenLocation[1] - center) * 100) / halfPixelsScreenHeight;
@@ -266,16 +264,15 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
 
     /**
      * Creates view of the main article, i.e. the selected article
-     *
      */
-    private void buildArticleView(){
+    private void buildArticleView() {
 
         Articles.Article.Content[] contents = mSelectedArticle.content;
 
         LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        paragraphLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+        paragraphLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
         LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.parallax_image_height));
-        imageLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+        imageLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
 
         buildArticleContent(contents);
 
@@ -293,9 +290,9 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     private void buildArticleContent(Articles.Article.Content[] contents) {
 
         LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        paragraphLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+        paragraphLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
         LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.parallax_image_height));
-        imageLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+        imageLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
 
         Typeface contentTypeFace = Typeface.createFromAsset(getAssets(), "fonts/DroidSerif-Regular.ttf");
 
@@ -304,11 +301,12 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         for (final Articles.Article.Content content : contents) {
 
             if (content.type.equals("paragraph")) {
+
                 TextView paragraph = new TextView(this);
                 paragraph.setLayoutParams(paragraphLayoutParams);
                 paragraph.setTextColor(Color.BLACK);
-                paragraph.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
-                paragraph.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8.0f,  getResources().getDisplayMetrics()), 1.0f);
+                paragraph.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                paragraph.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8.0f, getResources().getDisplayMetrics()), 1.0f);
                 paragraph.setTypeface(contentTypeFace);
                 paragraph.setPadding(sidePadding, 0, sidePadding, 0);
 
@@ -321,6 +319,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                 }
 
             } else if (content.type.equals("image")) {
+
                 final ImageView image = new ImageView(this);
                 image.setLayoutParams(imageLayoutParams);
                 mArticleContent.addView(image);
@@ -333,6 +332,40 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                         startActivity(intent);
                     }
                 });
+
+            } else if (content.type.equals("video")) {
+
+                View videoView = mLayoutInflater.inflate(R.layout.video_view, null);
+                videoView.setLayoutParams(imageLayoutParams);
+                ImageView thumbnail = (ImageView) videoView.findViewById(R.id.thumbnail);
+                Picasso.with(this).load("http://img.youtube.com/vi/" + content.data.videoId + "/mqdefault.jpg").fit().centerCrop().into(thumbnail);
+                mArticleContent.addView(videoView);
+                videoView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(content.data.url)));
+                    }
+                });
+
+            } else if (content.type.equals("header")) {
+
+                Typeface headerTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
+                TextView header = new TextView(this);
+                header.setTypeface(headerTypeFace);
+                header.setLayoutParams(paragraphLayoutParams);
+                header.setTextColor(Color.BLACK);
+                header.setPadding(sidePadding, 0, sidePadding, 0);
+                header.setText(content.data.content);
+
+                if (content.data.size.equals("H1")) {
+                    header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                } else if (content.data.size.equals("H2")) {
+                    header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                } else if (content.data.size.equals("H3")) {
+                    header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                }
+
+                mArticleContent.addView(header);
             }
 
         }
@@ -344,7 +377,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
      *
      * @param nextArticle
      */
-    private void loadNextArticle(Articles.Article nextArticle){
+    private void loadNextArticle(Articles.Article nextArticle) {
 
         View view = mLayoutInflater.inflate(R.layout.article_layout, null);
         mArticleContent.addView(view);
@@ -373,7 +406,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         buildArticleContent(nextArticle.content);
 
         LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        paragraphLayoutParams.setMargins(0,(int) getResources().getDimension(R.dimen.extra_padding),0,(int) getResources().getDimension(R.dimen.extra_padding));
+        paragraphLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
 
         View separator = mLayoutInflater.inflate(R.layout.custom_separator, null);
         separator.setLayoutParams(paragraphLayoutParams);

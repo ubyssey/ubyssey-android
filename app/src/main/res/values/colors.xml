@@ -5,6 +5,7 @@
     <color name="light_black">#ff2f2f2f</color>
     <color name="transparent_black">#be000000</color>
     <color name="primary_blue">#0071c9</color>
+    <color name="secondary_blue">#ff005ca8</color>
     <color name="dark_blue">#194D6A</color>
     <color name="light_blue">#2196F3</color>
     <color name="dark_gray">#333</color>

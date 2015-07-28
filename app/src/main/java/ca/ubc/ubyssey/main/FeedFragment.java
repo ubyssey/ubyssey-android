@@ -21,7 +21,6 @@ import ca.ubc.ubyssey.MainActivity;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.network.GsonRequest;
-import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.network.RequestManager;
 import ca.ubc.ubyssey.view.ViewHelper;
 import de.greenrobot.event.EventBus;
@@ -32,7 +31,7 @@ import de.greenrobot.event.EventBus;
  * <p/>
  * Created by Chris Li on 3/16/2015.
  */
-public class FeedFragment extends Fragment implements ObservableScrollViewCallbacks{
+public class FeedFragment extends Fragment implements ObservableScrollViewCallbacks {
 
     private static final String TAG = FeedFragment.class.getSimpleName();
     private static final String CATEGORY_KEY = "category";
@@ -67,7 +66,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         mNewsListView.setScrollViewCallbacks(this);
 
         Bundle bundle = getArguments();
-        int category = bundle.getInt(CATEGORY_KEY,0);
+        int category = bundle.getInt(CATEGORY_KEY, 0);
 
         GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(getFeedUrl(category), Articles.class, null, new Response.Listener<Articles>() {
             @Override
@@ -78,7 +77,9 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                         if (isAdded() && getActivity() != null) {
                             response.setupNextArticles();
                             Articles.Article firstArticle = response.results[0];
-                            Picasso.with(getActivity()).load(firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
+                            if (firstArticle.featured_image != null) {
+                                Picasso.with(getActivity()).load(firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
+                            }
                             mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
                             mNewsListView.addHeaderView(mNewsHeaderView, null, false);
                             mNewsListView.setAdapter(mNewsAdapter);

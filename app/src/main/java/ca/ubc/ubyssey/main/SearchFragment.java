@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,9 +14,6 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Articles;
@@ -52,7 +46,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    public void makeSearchRequest (final String searchTerm) {
+    public void makeSearchRequest(final String searchTerm) {
 
         GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(getSearchUrl(searchTerm), Articles.class, null, new Response.Listener<Articles>() {
             @Override
@@ -79,7 +73,7 @@ public class SearchFragment extends Fragment {
                     } else {
                         mSearchListView.setAdapter(null);
                         mSearchEmptyText.setVisibility(View.VISIBLE);
-                        mSearchEmptyText.setText("No search results for \""+ searchTerm +"\".");
+                        mSearchEmptyText.setText("No search results for \"" + searchTerm + "\".");
                     }
                 }
             }
@@ -99,7 +93,7 @@ public class SearchFragment extends Fragment {
         mSearchEmptyText.setText("Please enter a search term.");
     }
 
-    private String getSearchUrl(String searchTerm){
+    private String getSearchUrl(String searchTerm) {
         return "http://dev.ubyssey.ca/api/articles/?q=" + searchTerm;
     }
 

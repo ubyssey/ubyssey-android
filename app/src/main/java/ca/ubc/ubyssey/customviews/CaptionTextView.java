@@ -34,7 +34,7 @@ public class CaptionTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    private void init(){
+    private void init() {
 
     }
 }

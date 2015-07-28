@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +20,7 @@ import android.widget.RelativeLayout;
 
 import ca.ubc.ubyssey.main.FeedFragment;
 import ca.ubc.ubyssey.main.SearchFragment;
+import ca.ubc.ubyssey.main.TrendingFragment;
 
 /**
  * Main Controller for the application data. Determines which fragment to show
@@ -40,6 +40,7 @@ public class MainActivity extends ActionBarActivity
     public static final int SPORTS_ITEM = 5;
     public static final int VIDEO_ITEM = 6;
     public static final int BLOG_ITEM = 7;
+    public static final int TRENDING_ITEM = 8;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -110,6 +111,10 @@ public class MainActivity extends ActionBarActivity
 
             case BLOG_ITEM:
                 fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(BLOG_ITEM)).commit();
+                break;
+
+            case TRENDING_ITEM:
+                fragmentTransaction.add(R.id.container, new TrendingFragment()).addToBackStack(null).commit();
                 break;
 
         }

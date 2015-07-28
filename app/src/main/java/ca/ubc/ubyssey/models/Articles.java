@@ -14,7 +14,7 @@ public class Articles implements Serializable {
     public String previous;
     public Article[] results;
 
-    public void setupNextArticles(){
+    public void setupNextArticles() {
 
         if (results != null) {
             if (results.length > 1) {

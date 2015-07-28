@@ -9,12 +9,12 @@ public class DrawerItem {
     private String mTitle;
     private int mTag;
 
-    public DrawerItem(String title, int tag){
+    public DrawerItem(String title, int tag) {
         this.mTitle = title;
         this.mTag = tag;
     }
 
-    public DrawerItem(boolean isSection, String title){
+    public DrawerItem(boolean isSection, String title) {
         this.isSection = isSection;
         this.mTitle = title;
     }
@@ -27,7 +27,7 @@ public class DrawerItem {
         return mTitle;
     }
 
-    public boolean isSection(){
+    public boolean isSection() {
         return isSection;
     }
 }

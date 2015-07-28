@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -18,12 +17,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,6 +140,7 @@ public class NavigationDrawerFragment extends Fragment {
         menuItems.add(new DrawerItem("Sports", MainActivity.SPORTS_ITEM));
         menuItems.add(new DrawerItem("Video", MainActivity.VIDEO_ITEM));
         menuItems.add(new DrawerItem("Blog", MainActivity.BLOG_ITEM));
+        menuItems.add(new DrawerItem("Trending", MainActivity.TRENDING_ITEM));
         menuItems.add(new DrawerItem(true, "Saved Topics"));
 
         return menuItems;
@@ -157,13 +155,14 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle.setToolbarNavigationClickListener(onClickListener);
     }
 
-    public void toggleDrawerLock(int lock){
+    public void toggleDrawerLock(int lock) {
         mDrawerLayout.setDrawerLockMode(lock);
     }
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *  @param fragmentId   The android:id of this fragment in its activity's layout.
+     *
+     * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      * @param mainLayout
      */

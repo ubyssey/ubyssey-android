@@ -14,5 +14,10 @@ public class Data implements Serializable {
     public int height;
     public String caption;
     public int id;
+    public String videoId;
+    public String title;
+    public String source;
+    public String content;
+    public String size;
 
 }

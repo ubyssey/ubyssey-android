@@ -1,16 +1,13 @@
 package ca.ubc.ubyssey.main;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Data;
-import ca.ubc.ubyssey.network.RequestBuilder;
 import de.greenrobot.event.EventBus;
 import uk.co.senab.photoview.PhotoViewAttacher;
 

@@ -1,15 +1,15 @@
 package ca.ubc.ubyssey;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.AbstractMap;
 import java.util.List;
-import java.util.Map;
 
 import ca.ubc.ubyssey.models.DrawerItem;
 
@@ -47,6 +47,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         return 0;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -59,7 +60,13 @@ public class NavigationDrawerAdapter extends BaseAdapter {
                 convertView.setLongClickable(false);
 
             } else {
-                convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+
+                if (menuItem.getTitle().equals("Trending")) {
+                    convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+                    convertView.setBackground(mContext.getResources().getDrawable(R.drawable.drawer_trending_item_background));
+                } else {
+                    convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+                }
             }
         }
 

@@ -33,7 +33,7 @@ public class ParagraphTextView extends TextView {
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
 
         int sidePadding = (int) getResources().getDimension(R.dimen.text_padding);
         int bottomPadding = (int) getResources().getDimension(R.dimen.extra_padding);
@@ -49,7 +49,7 @@ public class ParagraphTextView extends TextView {
         setId(Utils.generateViewId());
 
         LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        paragraphLayoutParams.setMargins(0, bottomPadding,0,bottomPadding);
+        paragraphLayoutParams.setMargins(0, bottomPadding, 0, bottomPadding);
         setLayoutParams(paragraphLayoutParams);
     }
 }

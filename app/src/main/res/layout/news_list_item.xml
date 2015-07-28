@@ -47,7 +47,7 @@
             android:textSize="13sp"
             android:textAllCaps="true"
             android:layout_below="@+id/headline_label"
-            android:layout_toRightOf="@+id/read_label"/>
+            android:layout_toRightOf="@+id/read_label" />
 
         <TextView
             android:id="@+id/time_label"

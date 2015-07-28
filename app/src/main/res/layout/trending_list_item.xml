@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/news_list_item_background"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp">
+
+        <TextView
+            android:id="@+id/poster_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/post_label"
+            android:textColor="@color/black"
+            android:layout_below="@id/poster_label"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_gray"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/post_label"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/source_icon"
+            android:layout_below="@id/post_label"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/at_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_black"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/post_label"
+            android:layout_toLeftOf="@+id/source_icon" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/trending_image"
+        android:layout_width="match_parent"
+        android:layout_height="320dp" />
+</LinearLayout>

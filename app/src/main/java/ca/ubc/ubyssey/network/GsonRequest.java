@@ -13,7 +13,6 @@ import com.google.gson.JsonSyntaxException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.models.Data;
 import ca.ubc.ubyssey.models.DataTypeAdapter;
 

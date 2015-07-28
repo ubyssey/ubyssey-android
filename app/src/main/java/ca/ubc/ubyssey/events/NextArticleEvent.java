@@ -6,5 +6,4 @@ package ca.ubc.ubyssey.events;
 public class NextArticleEvent {
 
 
-
 }

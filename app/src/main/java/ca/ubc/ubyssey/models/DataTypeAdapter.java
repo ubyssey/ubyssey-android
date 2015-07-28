@@ -38,12 +38,24 @@ public class DataTypeAdapter extends TypeAdapter<Data> {
                         data.height = in.nextInt();
                     } else if (name.equals("url")) {
                         data.url = in.nextString();
+                    } else if (name.equals("title")) {
+                        data.title = in.nextString();
+                    } else if (name.equals("source")) {
+                        data.source = in.nextString();
                     } else if (name.equals("credit")) {
                         data.credit = in.nextString();
                     } else if (name.equals("caption")) {
                         data.caption = in.nextString();
+                    } else if (name.equals("content")) {
+                        data.content = in.nextString();
+                    } else if (name.equals("size")) {
+                        data.size = in.nextString();
                     } else if (name.equals("id")) {
-                        data.id = in.nextInt();
+                        try {
+                            data.id = in.nextInt();
+                        } catch (NumberFormatException e) {
+                            data.videoId = in.nextString();
+                        }
                     } else {
                         in.skipValue();
                     }

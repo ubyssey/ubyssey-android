@@ -34,7 +34,7 @@ public class TitleTextView extends TextView {
     }
 
 
-    private void init(Context context){
+    private void init(Context context) {
 
         int sidePadding = (int) getResources().getDimension(R.dimen.text_padding);
         int bottomPadding = (int) getResources().getDimension(R.dimen.extra_padding);

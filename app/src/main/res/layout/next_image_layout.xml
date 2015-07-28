@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -16,13 +17,13 @@
         android:gravity="center"
         android:background="@drawable/top_shadow_gradient"
         android:layout_width="match_parent"
-        android:layout_height="75dp"/>
+        android:layout_height="75dp" />
 
     <View
         android:background="@drawable/bottom_shadow_gradient"
         android:layout_alignBottom="@+id/next_article_image"
         android:layout_width="match_parent"
-        android:layout_height="75dp"/>
+        android:layout_height="75dp" />
 
     <TextView
         android:background="@color/white"

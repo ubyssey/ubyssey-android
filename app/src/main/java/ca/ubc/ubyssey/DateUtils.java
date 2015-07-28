@@ -10,7 +10,7 @@ import java.util.TimeZone;
 
 /**
  * Utility class for managing dates
- *
+ * <p/>
  * Created by Chris Li on 3/31/2015.
  */
 public class DateUtils {
@@ -69,9 +69,9 @@ public class DateUtils {
         }
     }
 
-    public static String getMonth(int month){
+    public static String getMonth(int month) {
         String monthString = "";
-        switch(month){
+        switch (month) {
             case 0:
                 monthString = "January";
                 break;
@@ -113,8 +113,12 @@ public class DateUtils {
         return monthString;
     }
 
-    public static String getProperDateString(String date){
-        return dayToString(getFormattedDate(date));
+    public static String getProperDateString(String date) {
+        if (date != null) {
+            return dayToString(getFormattedDate(date));
+        } else {
+            return null;
+        }
     }
 
 }

@@ -2,7 +2,6 @@ package ca.ubc.ubyssey.main;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Articles;
-import ca.ubc.ubyssey.network.RequestBuilder;
 
 /**
  * Adapter class to show the news feed items
@@ -92,11 +88,10 @@ public class NewsFeedAdapter extends BaseAdapter {
             viewHolder.newsImageView.setVisibility(View.GONE);
         }
 
-
         return convertView;
     }
 
-    public class NewsItemViewHolder {
+    public static class NewsItemViewHolder {
         ImageView newsImageView;
         TextView newsHeadline;
         TextView newsTimestampTextView;

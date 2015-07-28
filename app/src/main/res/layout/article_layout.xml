@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/article_image_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/parallax_image_height">
 
-        <FrameLayout
-            android:id="@+id/article_image_container"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/parallax_image_height">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/parallax_inner_image_height"
-                android:id="@+id/article_image" />
-        </FrameLayout>
+            android:layout_height="@dimen/parallax_inner_image_height"
+            android:id="@+id/article_image" />
+    </FrameLayout>
 
-        <TextView
-            android:background="@drawable/bottom_shadow_gradient"
-            android:layout_alignBottom="@+id/article_image_container"
-            android:fontFamily="sans-serif-thin"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="15dp"
-            android:layout_height="75dp"
-            android:textColor="@color/white"
-            android:id="@+id/article_image_caption" />
+    <TextView
+        android:background="@drawable/bottom_shadow_gradient"
+        android:layout_alignBottom="@+id/article_image_container"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:layout_height="75dp"
+        android:textColor="@color/white"
+        android:id="@+id/article_image_caption" />
 
-        <TextView
-            android:background="@color/white"
-            android:textColor="@color/dark_gray"
-            android:textSize="24sp"
-            android:layout_below="@+id/article_image_container"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="@dimen/article_vertical_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/article_title" />
+    <TextView
+        android:background="@color/white"
+        android:textColor="@color/dark_gray"
+        android:textSize="24sp"
+        android:layout_below="@+id/article_image_container"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="@dimen/article_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/article_title" />
 
-        <TextView
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="11sp"
-            android:textAllCaps="true"
-            android:layout_below="@+id/article_title"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/article_author" />
+    <TextView
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="11sp"
+        android:textAllCaps="true"
+        android:layout_below="@+id/article_title"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/article_author" />
 
-        <TextView
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:textSize="11sp"
-            android:textAllCaps="true"
-            android:layout_alignBottom="@+id/article_author"
-            android:layout_toRightOf="@+id/article_author"
-            android:paddingBottom="10dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/article_date" />
+    <TextView
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        android:textAllCaps="true"
+        android:layout_alignBottom="@+id/article_author"
+        android:layout_toRightOf="@+id/article_author"
+        android:paddingBottom="10dp"
+        android:paddingRight="30dp"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/article_date" />
 
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:background="@color/white"
-            android:layout_below="@+id/article_author"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/article_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_below="@+id/article_author"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/article_content" />
 
-    </RelativeLayout>
+</RelativeLayout>
