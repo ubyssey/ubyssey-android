@@ -383,11 +383,15 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleContent.addView(view);
         FrameLayout imageContainer = (FrameLayout) view.findViewById(R.id.article_image_container);
         ImageView articleImageView = (ImageView) view.findViewById(R.id.article_image);
-        Picasso.with(this).load(nextArticle.featured_image.url).fit().centerCrop().into(articleImageView);
+        if (nextArticle.featured_image != null) {
+            Picasso.with(this).load(nextArticle.featured_image.url).fit().centerCrop().into(articleImageView);
+        }
         mFeaturedImages.add(imageContainer);
 
         TextView articleImageCaption = (TextView) view.findViewById(R.id.article_image_caption);
-        articleImageCaption.setText(nextArticle.featured_image.caption);
+        if (nextArticle.featured_image != null) {
+            articleImageCaption.setText(nextArticle.featured_image.caption);
+        }
 
         TextView articleTitle = (TextView) view.findViewById(R.id.article_title);
         Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");

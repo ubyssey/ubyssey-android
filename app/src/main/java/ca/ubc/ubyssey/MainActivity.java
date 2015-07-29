@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import ca.ubc.ubyssey.main.FeedFragment;
@@ -50,6 +51,7 @@ public class MainActivity extends ActionBarActivity
 
     private Toolbar mToolbar;
     private boolean mIsSearchSelected = false;
+    private boolean mIsTrendingSelected = false;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
@@ -82,44 +84,75 @@ public class MainActivity extends ActionBarActivity
 
         switch (value) {
             case HOME_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(HOME_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(HOME_ITEM, false)).commit();
                 break;
 
             case CULTURE_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(CULTURE_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(CULTURE_ITEM, false)).commit();
                 break;
 
             case OPINION_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(OPINION_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(OPINION_ITEM, false)).commit();
                 break;
 
             case FEATURES_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(FEATURES_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(FEATURES_ITEM, false)).commit();
                 break;
 
             case DATA_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(DATA_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(DATA_ITEM, false)).commit();
                 break;
 
             case SPORTS_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(SPORTS_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(SPORTS_ITEM, false)).commit();
                 break;
 
             case VIDEO_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(VIDEO_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(VIDEO_ITEM, false)).commit();
                 break;
 
             case BLOG_ITEM:
-                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(BLOG_ITEM)).commit();
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(BLOG_ITEM, false)).commit();
                 break;
 
             case TRENDING_ITEM:
-                fragmentTransaction.add(R.id.container, new TrendingFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.container, new TrendingFragment()).commit();
+                TransitionDrawable transitionDrawable = (TransitionDrawable) mToolbar.getBackground();
+                ImageView toolbarImage = (ImageView) mToolbar.findViewById(R.id.toolbar_title);
+                LinearLayout trendingLayout = (LinearLayout) mToolbar.findViewById(R.id.trending_title);
+                toolbarImage.setVisibility(View.GONE);
+                trendingLayout.setVisibility(View.VISIBLE);
+                transitionDrawable.startTransition(500);
+                mIsTrendingSelected = true;
                 break;
-
         }
     }
 
+    @Override
+    public void onTopicItemSelected(String topic, int id) {
+        handleToolbarTransitions();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, FeedFragment.newInstance(id, true)).commit();
+
+    }
+
+    private void handleToolbarTransitions() {
+        if (mIsTrendingSelected) {
+            mToolbar.findViewById(R.id.toolbar_title).setVisibility(View.VISIBLE);
+            ((TransitionDrawable) mToolbar.getBackground()).reverseTransition(500);
+            mToolbar.findViewById(R.id.trending_title).setVisibility(View.GONE);
+            mIsTrendingSelected = false;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -143,6 +176,7 @@ public class MainActivity extends ActionBarActivity
 
                 final TransitionDrawable transitionDrawable = (TransitionDrawable) mToolbar.getBackground();
                 final ImageView toolbarImage = (ImageView) mToolbar.findViewById(R.id.toolbar_title);
+                final LinearLayout trendingLayout = (LinearLayout) mToolbar.findViewById(R.id.trending_title);
                 final EditText toolbarSearch = (EditText) mToolbar.findViewById(R.id.search_edittext);
                 toolbarSearch.setOnKeyListener(new View.OnKeyListener() {
                     @Override
@@ -165,16 +199,21 @@ public class MainActivity extends ActionBarActivity
                 });
 
                 if (!mIsSearchSelected) {
-
                     toolbarImage.setVisibility(View.GONE);
+                    trendingLayout.setVisibility(View.GONE);
                     transitionDrawable.startTransition(500);
                     toolbarSearch.setVisibility(View.VISIBLE);
                     mNavigationDrawerFragment.setDrawerIndicatorEnabled(mIsSearchSelected, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // performs back button transition for search fragment
-                            toolbarImage.setVisibility(View.VISIBLE);
-                            transitionDrawable.reverseTransition(500);
+                            if (mIsTrendingSelected) {
+                                trendingLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                toolbarImage.setVisibility(View.VISIBLE);
+                                transitionDrawable.reverseTransition(500);
+                            }
+
                             toolbarSearch.setVisibility(View.GONE);
                             getSupportActionBar().setDisplayHomeAsUpEnabled(!mIsSearchSelected);
                             mNavigationDrawerFragment.setDrawerIndicatorEnabled(mIsSearchSelected, null);
@@ -221,8 +260,12 @@ public class MainActivity extends ActionBarActivity
 
         // performs back button transition for search fragment
         if (mIsSearchSelected) {
-            mToolbar.findViewById(R.id.toolbar_title).setVisibility(View.VISIBLE);
-            ((TransitionDrawable) mToolbar.getBackground()).reverseTransition(500);
+            if (mIsTrendingSelected) {
+                mToolbar.findViewById(R.id.trending_title).setVisibility(View.VISIBLE);
+            } else {
+                mToolbar.findViewById(R.id.toolbar_title).setVisibility(View.VISIBLE);
+                ((TransitionDrawable) mToolbar.getBackground()).reverseTransition(500);
+            }
             mToolbar.findViewById(R.id.search_edittext).setVisibility(View.GONE);
             getSupportActionBar().setDisplayHomeAsUpEnabled(!mIsSearchSelected);
             mNavigationDrawerFragment.setDrawerIndicatorEnabled(mIsSearchSelected, null);

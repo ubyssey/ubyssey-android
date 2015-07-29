@@ -65,6 +65,7 @@ public class TrendingFeedAdapter extends BaseAdapter {
             trendingItemViewHolder.postText = (TextView) convertView.findViewById(R.id.post_label);
             trendingItemViewHolder.timeText = (TextView) convertView.findViewById(R.id.time_label);
             trendingItemViewHolder.atText = (TextView) convertView.findViewById(R.id.at_label);
+            trendingItemViewHolder.sourceImage = (ImageView) convertView.findViewById(R.id.source_icon);
             convertView.setTag(trendingItemViewHolder);
         } else {
             trendingItemViewHolder = (TrendingItemViewHolder) convertView.getTag();
@@ -89,6 +90,18 @@ public class TrendingFeedAdapter extends BaseAdapter {
             trendingItemViewHolder.postImage.setVisibility(View.GONE);
         }
 
+        if (trendingItem.source.equals("instagram")) {
+            trendingItemViewHolder.sourceImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.instagram));
+        } else if (trendingItem.source.equals("twitter")) {
+            trendingItemViewHolder.sourceImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.twitter));
+        } else if (trendingItem.source.equals("reddit")) {
+            trendingItemViewHolder.sourceImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.reddit));
+        } else if (trendingItem.source.equals("facebook")) {
+            trendingItemViewHolder.sourceImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.facebook));
+        } else {
+            trendingItemViewHolder.sourceImage.setImageDrawable(null);
+        }
+
         return convertView;
     }
 
@@ -97,6 +110,7 @@ public class TrendingFeedAdapter extends BaseAdapter {
         TextView postText;
         TextView timeText;
         TextView atText;
+        ImageView sourceImage;
         ImageView postImage;
     }
 }

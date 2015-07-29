@@ -34,7 +34,8 @@ import de.greenrobot.event.EventBus;
 public class FeedFragment extends Fragment implements ObservableScrollViewCallbacks {
 
     private static final String TAG = FeedFragment.class.getSimpleName();
-    private static final String CATEGORY_KEY = "category";
+    private static final String ID_KEY = "id";
+    private static final String IS_TOPIC_KEY = "topic";
 
     private View mNewsHeaderView;
     private ImageView mNewsImageView;
@@ -43,11 +44,12 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
 
     private RequestManager mRequestManager;
 
-    public static FeedFragment newInstance(int category) {
+    public static FeedFragment newInstance(int id, boolean isTopic) {
         FeedFragment fragment = new FeedFragment();
 
         Bundle args = new Bundle();
-        args.putInt(CATEGORY_KEY, category);
+        args.putInt(ID_KEY, id);
+        args.putBoolean(IS_TOPIC_KEY, isTopic);
         fragment.setArguments(args);
 
         return fragment;
@@ -66,9 +68,17 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         mNewsListView.setScrollViewCallbacks(this);
 
         Bundle bundle = getArguments();
-        int category = bundle.getInt(CATEGORY_KEY, 0);
+        int id = bundle.getInt(ID_KEY, 0);
+        boolean isTopic = bundle.getBoolean(IS_TOPIC_KEY, false);
 
-        GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(getFeedUrl(category), Articles.class, null, new Response.Listener<Articles>() {
+        String url;
+        if (isTopic) {
+            url = "http://dev.ubyssey.ca/api/topics/"+ id +"/articles/";
+        } else {
+            url = getFeedUrl(id);
+        }
+
+        GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(url, Articles.class, null, new Response.Listener<Articles>() {
             @Override
             public void onResponse(Articles response) {
 

@@ -21,10 +21,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.ubc.ubyssey.models.DrawerItem;
+import ca.ubc.ubyssey.models.Topics;
+import ca.ubc.ubyssey.network.GsonRequest;
+import ca.ubc.ubyssey.network.RequestManager;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -104,26 +110,55 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerAdapter = new NavigationDrawerAdapter(getActivity(), createMenuItems());
         mDrawerListView.setAdapter(mDrawerAdapter);
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition + 1, true);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DrawerItem menuItem = (DrawerItem) mDrawerAdapter.getItem(position);
                 if (menuItem != null) {
-                    mCallbacks.onNavigationDrawerItemSelected(menuItem.getTag());
+                    if (!menuItem.isSection()) {
+                        if (menuItem.isTopic()) {
+                            mCallbacks.onTopicItemSelected(menuItem.getTitle(), menuItem.getId());
+                        } else {
+                            mCallbacks.onNavigationDrawerItemSelected(menuItem.getTag());
+                        }
+                    }
                     mDrawerLayout.closeDrawer(mFragmentContainerView);
                 }
             }
         });
 
-        View addTopic = inflater.inflate(R.layout.add_topic_button, null);
-        mDrawerListView.addFooterView(addTopic, null, false);
-        addTopic.setOnClickListener(new View.OnClickListener() {
+        GsonRequest<Topics> trendingGsonRequest = new GsonRequest<Topics>("http://dev.ubyssey.ca/api/topics/", Topics.class, null, new Response.Listener<Topics>() {
             @Override
-            public void onClick(View v) {
+            public void onResponse(Topics response) {
+
+                if (response != null) {
+                    if (response.results.length > 0) {
+                        if (isAdded() && getActivity() != null) {
+
+                            List<DrawerItem> drawerItems = new ArrayList<>();
+                            for (Topics.Topic topic : response.results) {
+                                drawerItems.add(new DrawerItem(true, topic.name, topic.id));
+                            }
+
+                            if (mDrawerAdapter != null && drawerItems.size() > 0) {
+                                mDrawerAdapter.addTopicItems(drawerItems);
+                            }
+
+                        }
+                    }
+                }
 
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+            }
         });
+
+        RequestManager requestManager = RequestManager.getInstance(getActivity());
+        requestManager.addToRequestQueue(trendingGsonRequest);
 
         return view;
     }
@@ -141,7 +176,7 @@ public class NavigationDrawerFragment extends Fragment {
         menuItems.add(new DrawerItem("Video", MainActivity.VIDEO_ITEM));
         menuItems.add(new DrawerItem("Blog", MainActivity.BLOG_ITEM));
         menuItems.add(new DrawerItem("Trending", MainActivity.TRENDING_ITEM));
-        menuItems.add(new DrawerItem(true, "Saved Topics"));
+        menuItems.add(new DrawerItem(true, "Topics"));
 
         return menuItems;
     }
@@ -303,5 +338,6 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int value);
+        void onTopicItemSelected(String topic, int id);
     }
 }

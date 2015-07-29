@@ -26,6 +26,31 @@
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/trending_title"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_action_action_trending_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="Trending"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 

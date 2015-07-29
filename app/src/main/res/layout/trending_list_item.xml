@@ -34,23 +34,25 @@
             android:id="@+id/time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/trending_gray"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/post_label"
             android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/source_icon"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="5dp"
             android:layout_below="@id/post_label"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/at_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/light_black"
+            android:textColor="@color/trending_gray"
             android:textSize="12sp"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/post_label"

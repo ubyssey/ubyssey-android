@@ -3,6 +3,7 @@ package ca.ubc.ubyssey;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import ca.ubc.ubyssey.models.DrawerItem;
  */
 public class NavigationDrawerAdapter extends BaseAdapter {
 
+    private static final int SECTION_TYPE = 0;
+    private static final int ITEM_TYPE = 1;
+    private static final int TOPIC_TYPE = 2;
 
     private Context mContext;
     private List<DrawerItem> mMenuItems;
@@ -47,32 +51,99 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         return 0;
     }
 
+    @Override
+    public int getViewTypeCount() {
+        return 3;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        DrawerItem item = mMenuItems.get(position);
+
+        if (item.isSection()) {
+            return SECTION_TYPE;
+        } else if (item.isTopic()) {
+            return TOPIC_TYPE;
+        } else {
+            return ITEM_TYPE;
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         DrawerItem menuItem = mMenuItems.get(position);
-        if (convertView == null) {
-            if (menuItem.isSection()) {
-                convertView = mLayoutInflater.inflate(R.layout.drawer_list_section_item, parent, false);
-                convertView.setOnClickListener(null);
-                convertView.setOnLongClickListener(null);
-                convertView.setLongClickable(false);
 
-            } else {
+            switch (getItemViewType(position)) {
 
-                if (menuItem.getTitle().equals("Trending")) {
-                    convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
-                    convertView.setBackground(mContext.getResources().getDrawable(R.drawable.drawer_trending_item_background));
-                } else {
-                    convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
-                }
+                case SECTION_TYPE:
+                    SectionHolder sectionHolder;
+                    if (convertView == null) {
+                        convertView = mLayoutInflater.inflate(R.layout.drawer_list_section_item, parent, false);
+                        sectionHolder = new SectionHolder();
+                        convertView.setOnClickListener(null);
+                        convertView.setOnLongClickListener(null);
+                        convertView.setLongClickable(false);
+                        sectionHolder.sectionTextView = (TextView) convertView.findViewById(R.id.menu_item_text);
+                        convertView.setTag(sectionHolder);
+                    } else {
+                        sectionHolder = (SectionHolder) convertView.getTag();
+                    }
+                    sectionHolder.sectionTextView.setText(menuItem.getTitle());
+                    return convertView;
+
+                case TOPIC_TYPE:
+                    TopicHolder topicHolder;
+                    if (convertView == null) {
+                        convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+                        topicHolder = new TopicHolder();
+                        topicHolder.topicTextView = (TextView) convertView.findViewById(R.id.menu_item_text);
+                        convertView.setTag(topicHolder);
+                    } else {
+                        topicHolder = (TopicHolder) convertView.getTag();
+                    }
+                    topicHolder.topicTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                    topicHolder.topicTextView.setText(menuItem.getTitle());
+                    return convertView;
+
+                case ITEM_TYPE:
+                    ItemHolder itemHolder;
+                    if (convertView == null) {
+                        convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
+                        itemHolder = new ItemHolder();
+                        itemHolder.itemTextView = (TextView) convertView.findViewById(R.id.menu_item_text);
+                        if (menuItem.getTitle().equals("Trending")) {
+                            convertView.setBackground(mContext.getResources().getDrawable(R.drawable.drawer_trending_item_background));
+                        }
+                        convertView.setTag(itemHolder);
+                    } else {
+                        itemHolder = (ItemHolder) convertView.getTag();
+                    }
+
+                    itemHolder.itemTextView.setText(menuItem.getTitle());
+                    return convertView;
             }
-        }
 
-        TextView menuTextView = (TextView) convertView.findViewById(R.id.menu_item_text);
-        menuTextView.setText(menuItem.getTitle());
-
-        return convertView;
+        return null;
     }
+
+    public void addTopicItems(List<DrawerItem> topicItems) {
+        mMenuItems.addAll(topicItems);
+        notifyDataSetChanged();
+    }
+
+    public static class SectionHolder {
+        TextView sectionTextView;
+    }
+
+    public static class ItemHolder {
+        TextView itemTextView;
+    }
+
+    public static class TopicHolder {
+        TextView topicTextView;
+    }
+
 }

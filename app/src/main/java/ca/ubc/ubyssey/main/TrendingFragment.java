@@ -14,7 +14,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import ca.ubc.ubyssey.R;
-import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.models.Trending;
 import ca.ubc.ubyssey.network.GsonRequest;
 import ca.ubc.ubyssey.network.RequestManager;

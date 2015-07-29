@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <ListView
+        android:layout_marginTop="70dp"
         android:layout_width="match_parent"
         android:id="@+id/trending_listview"
         android:layout_height="match_parent"
