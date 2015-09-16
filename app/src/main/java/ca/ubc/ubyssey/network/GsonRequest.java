@@ -22,7 +22,7 @@ import ca.ubc.ubyssey.models.DataTypeAdapter;
  * Created by Chris Li on 3/16/2015.
  */
 public class GsonRequest<T> extends Request<T> {
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(Data.class, new DataTypeAdapter()).create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Data.class, new DataTypeAdapter().nullSafe()).create();
     private final Class<T> clazz;
     private final Map<String, String> headers;
     private final Response.Listener<T> listener;

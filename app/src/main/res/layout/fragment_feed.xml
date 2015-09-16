@@ -4,11 +4,16 @@
     android:background="@color/white"
     android:layout_height="match_parent">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <com.github.ksoichiro.android.observablescrollview.ObservableListView
         android:layout_width="match_parent"
         android:id="@+id/news_listview"
         android:layout_height="match_parent"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

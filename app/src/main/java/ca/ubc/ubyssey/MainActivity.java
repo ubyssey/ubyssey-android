@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import ca.ubc.ubyssey.main.FeedFragment;
 import ca.ubc.ubyssey.main.SearchFragment;
@@ -29,7 +30,7 @@ import ca.ubc.ubyssey.main.TrendingFragment;
  * Created by Chris Li on 3/16/2015.
  */
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, FeedFragment.ErrorCallback {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -48,6 +49,7 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private SearchFragment mSearchFragment;
+    private RelativeLayout mErrorLayout;
 
     private Toolbar mToolbar;
     private boolean mIsSearchSelected = false;
@@ -73,6 +75,8 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout),
                 mToolbar,
                 mainLayout);
+
+        mErrorLayout = (RelativeLayout) findViewById(R.id.error_indicator);
     }
 
     @Override
@@ -274,5 +278,26 @@ public class MainActivity extends ActionBarActivity
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void OnInternetNotAvailable(String message) {
+
+        mErrorLayout.setVisibility(View.VISIBLE);
+        TextView errorText = (TextView) mErrorLayout.findViewById(R.id.error_text);
+        errorText.setText(message);
+    }
+
+    @Override
+    public void OnUnableToLoad(String message) {
+
+        mErrorLayout.setVisibility(View.VISIBLE);
+        TextView errorText = (TextView) mErrorLayout.findViewById(R.id.error_text);
+        errorText.setText(message);
+    }
+
+    @Override
+    public void HideErrorMessage() {
+        mErrorLayout.setVisibility(View.GONE);
     }
 }

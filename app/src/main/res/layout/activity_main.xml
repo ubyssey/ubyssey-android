@@ -19,6 +19,30 @@
             android:layout_height="match_parent" />
 
         <include layout="@layout/main_toolbar" />
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:background="@color/transparent_black"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/error_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+            <TextView
+                android:id="@+id/error_text"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <!-- android:layout_gravity="start" tells DrawerLayout to treat

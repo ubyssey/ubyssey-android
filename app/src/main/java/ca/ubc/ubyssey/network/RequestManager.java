@@ -46,5 +46,7 @@ public class RequestManager {
         getRequestQueue().add(req);
     }
 
-
+    public com.android.volley.Cache getCache(){
+        return mRequestQueue.getCache();
+    }
 }

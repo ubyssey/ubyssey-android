@@ -2,6 +2,7 @@ package ca.ubc.ubyssey.main;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.UnsupportedEncodingException;
+
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
+import ca.ubc.ubyssey.Utils;
 import ca.ubc.ubyssey.models.Articles;
 
 /**
@@ -73,7 +77,14 @@ public class NewsFeedAdapter extends BaseAdapter {
         }
 
         Articles.Article article = mArticles[position];
-        viewHolder.newsHeadline.setText(article.long_headline);
+        try {
+            String encodedString = new String(article.long_headline.getBytes("ISO-8859-1"), "UTF-8");
+            viewHolder.newsHeadline.setText(Html.fromHtml(encodedString));
+        } catch (UnsupportedEncodingException e) {
+            viewHolder.newsHeadline.setText(article.long_headline);
+            e.printStackTrace();
+        }
+
         viewHolder.newsHeadline.setTypeface(mHeadlineTypeface);
         viewHolder.newsSectionTextView.setText(article.section.name);
         viewHolder.newsSectionTextView.setTypeface(mMetaTypeface);
@@ -89,6 +100,11 @@ public class NewsFeedAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public void reload(Articles.Article[] newArticles){
+        mArticles = Utils.concatenate(mArticles, newArticles);
+        notifyDataSetChanged();
     }
 
     public static class NewsItemViewHolder {

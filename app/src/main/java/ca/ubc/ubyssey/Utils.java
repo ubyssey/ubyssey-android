@@ -4,7 +4,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.lang.reflect.Array;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import ca.ubc.ubyssey.models.Articles;
 
 /**
  * Utility class for various functions used throughout the app
@@ -32,6 +35,18 @@ public class Utils {
                 return result;
             }
         }
+    }
+
+    public static <T> T[] concatenate (T[] a, T[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+
+        @SuppressWarnings("unchecked")
+        T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+
+        return c;
     }
 
 

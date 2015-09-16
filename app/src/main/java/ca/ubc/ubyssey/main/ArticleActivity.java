@@ -105,7 +105,14 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleTitle = (TextView) findViewById(R.id.article_title);
         Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
         mArticleTitle.setTypeface(titleTypeFace);
-        mArticleTitle.setText(mSelectedArticle.long_headline);
+
+        try {
+            String encodedTitle = new String(mSelectedArticle.long_headline.getBytes("ISO-8859-1"), "UTF-8");
+            mArticleTitle.setText(Html.fromHtml(encodedTitle));
+        } catch (UnsupportedEncodingException e) {
+            mArticleTitle.setText(Html.fromHtml(mSelectedArticle.long_headline));
+            e.printStackTrace();
+        }
 
         mArticleAuthor = (TextView) findViewById(R.id.article_author);
         Typeface metaTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Bold.otf");
@@ -396,7 +403,14 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         TextView articleTitle = (TextView) view.findViewById(R.id.article_title);
         Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
         articleTitle.setTypeface(titleTypeFace);
-        articleTitle.setText(nextArticle.long_headline);
+
+        try {
+            String encodedTitle = new String(nextArticle.long_headline.getBytes("ISO-8859-1"), "UTF-8");
+            articleTitle.setText(Html.fromHtml(encodedTitle));
+        } catch (UnsupportedEncodingException e) {
+            articleTitle.setText(Html.fromHtml(nextArticle.long_headline));
+            e.printStackTrace();
+        }
 
         TextView articleAuthor = (TextView) view.findViewById(R.id.article_author);
         Typeface metaTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Bold.otf");
