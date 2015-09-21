@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 import ca.ubc.ubyssey.MainActivity;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.Utils;
+import ca.ubc.ubyssey.events.NextPageEvent;
 import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.models.Data;
 import ca.ubc.ubyssey.models.DataTypeAdapter;
@@ -48,6 +50,9 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
     private static final String TAG = FeedFragment.class.getSimpleName();
     private static final String ID_KEY = "id";
     private static final String IS_TOPIC_KEY = "topic";
+    private static final int ARTICLE_REQUEST_CODE = 101;
+
+    private static final String NEXT_PAGE_URL = "http://dev.ubyssey.ca/api/articles/?page=";
 
     private View mNewsHeaderView;
     private ImageView mNewsImageView;
@@ -60,6 +65,9 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
     private boolean mLoadingMore = true;
     private String mNextArticlesUrl = null;
     private String mUrl;
+
+    private int mCurrentPageCount = 1;
+    private boolean mIsNextPageEvent = false;
 
     private SwipeRefreshLayout mSwipeContainer;
 
@@ -82,6 +90,31 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement ErrorCallbacks.");
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ARTICLE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            NextPageEvent nextPageEvent = EventBus.getDefault().removeStickyEvent(NextPageEvent.class);
+            if (nextPageEvent.nextPage > mCurrentPageCount) {
+                mIsNextPageEvent = true;
+                Thread thread = new Thread(loadMoreArticles);
+                thread.start();
+            } else { // retrieve the articles from the cache since we already loaded them
+                if (mRequestManager.getCache().get(NEXT_PAGE_URL + nextPageEvent.nextPage) != null) {
+                    String cachedData = new String(mRequestManager.getCache().get(NEXT_PAGE_URL + nextPageEvent.nextPage).data);
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Data.class, new DataTypeAdapter().nullSafe()).create();
+                    Articles articles = gson.fromJson(cachedData, Articles.class);
+                    articles.setupNextArticles();
+                    articles.setPageNumbers(nextPageEvent.nextPage);
+                    Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
+                    EventBus.getDefault().postSticky(articles.results[0]);
+                    startActivityForResult(articleIntent, ARTICLE_REQUEST_CODE);
+                }
+            }
+        }
+
     }
 
     @Override
@@ -142,7 +175,20 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                                 if (isAdded() && getActivity() != null) {
                                     mNextArticlesUrl = response.next;
                                     response.setupNextArticles();
+
+                                    mCurrentPageCount++;
+                                    response.setPageNumbers(mCurrentPageCount);
+
+                                    int currentArticleCount = mNewsAdapter.getCount();
                                     mNewsAdapter.reload(response.results);
+
+                                    if (mIsNextPageEvent) {
+                                        Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(currentArticleCount);
+                                        Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
+                                        EventBus.getDefault().postSticky(selectedArticle);
+                                        startActivityForResult(articleIntent, ARTICLE_REQUEST_CODE);
+                                        mIsNextPageEvent = false;
+                                    }
                                 }
                             }
                             mLoadingMore = false;
@@ -190,6 +236,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                         if (isAdded() && getActivity() != null) {
                             mNextArticlesUrl = response.next;
                             response.setupNextArticles();
+                            response.setPageNumbers(mCurrentPageCount);
                             Articles.Article firstArticle = response.results[0];
                             if (firstArticle.featured_image != null) {
                                 Picasso.with(getActivity()).load(firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
@@ -200,10 +247,10 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                             mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1); //
+                                    Articles.Article selectedArticle = (Articles.Article) mNewsAdapter.getItem(position - 1);
                                     Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
                                     EventBus.getDefault().postSticky(selectedArticle);
-                                    startActivity(articleIntent);
+                                    startActivityForResult(articleIntent, ARTICLE_REQUEST_CODE);
                                 }
                             });
                         }

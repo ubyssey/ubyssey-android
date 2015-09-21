@@ -1,6 +1,7 @@
 package ca.ubc.ubyssey.main;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -26,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -38,6 +40,7 @@ import java.util.List;
 
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
+import ca.ubc.ubyssey.events.NextPageEvent;
 import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.view.ViewHelper;
 import de.greenrobot.event.EventBus;
@@ -45,11 +48,11 @@ import de.greenrobot.event.EventBus;
 
 /**
  * Activity used to view a specific article.
- * TODO: Consider using an event bus for data passing
+ *
  * <p/>
  * Created by Chris Li on 3/17/2015.
  */
-public class ArticleActivity extends ActionBarActivity implements ObservableScrollViewCallbacks, View.OnClickListener {
+public class ArticleActivity extends ActionBarActivity implements ObservableScrollViewCallbacks, View.OnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final String TAG = ArticleActivity.class.getSimpleName();
 
@@ -61,7 +64,6 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     private TextView mArticleTitle;
     private TextView mArticleAuthor;
     private TextView mArticleDate;
-    private Button mPreviousButton;
     private LinearLayout mArticleContent;
     private ObservableScrollView mArticleScrollView;
     private Articles.Article mSelectedArticle;
@@ -128,32 +130,11 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleContent = (LinearLayout) findViewById(R.id.article_content);
         buildArticleView();
 
-        mPreviousButton = (Button) findViewById(R.id.previous_button);
-        mPreviousButton.setOnClickListener(this);
-
         mArticleScrollView = (ObservableScrollView) findViewById(R.id.article_scrollview);
         mArticleScrollView.setScrollViewCallbacks(this);
 
-        addNewHeight();
+        mArticleScrollView.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
-    }
-
-    private void addNewHeight() {
-        final ViewTreeObserver observer = mArticleScrollView.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                mScrollViewHeight = mArticleScrollView.getChildAt(0).getHeight();
-
-                /*
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mArticleScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    mArticleScrollView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }*/
-            }
-        });
     }
 
     @Override
@@ -183,6 +164,11 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
     /**
      * This method contains the logic for the parallax effect for each featured image
      *
@@ -193,7 +179,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
 
-        if (scrollY > (0.75f * mScrollViewHeight) && !loadingMore) {
+        if (scrollY > (0.50f * mScrollViewHeight) && !loadingMore) {
             if (mNextArticle != null) {
                 loadingMore = true;
                 loadNextArticle(mNextArticle);
@@ -209,10 +195,8 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                 mArticlePosition = i;
 
                 if (i == 0) {
-                    mPreviousButton.setText("top");
                     ViewHelper.setTranslationY(mFeaturedImages.get(i), scrollY / 2);
                 } else {
-                    mPreviousButton.setText(String.valueOf(i + 1));
                     Display display = getWindowManager().getDefaultDisplay();
                     DisplayMetrics outMetrics = new DisplayMetrics();
                     display.getMetrics(outMetrics);
@@ -286,6 +270,23 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         View separator = mLayoutInflater.inflate(R.layout.custom_separator, null);
         separator.setLayoutParams(paragraphLayoutParams);
         mArticleContent.addView(separator);
+
+        if (mNextArticle == null) {
+            View nextPageView = mLayoutInflater.inflate(R.layout.next_page_layout, null);
+            nextPageView.setLayoutParams(paragraphLayoutParams);
+            ((TextView) nextPageView.findViewById(R.id.page_text)).setText("Go to page " + (mSelectedArticle.getPageNumber() + 1));
+            final Button nextButton = (Button) nextPageView.findViewById(R.id.next_button);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nextButton.setEnabled(false);
+                    EventBus.getDefault().postSticky(new NextPageEvent(mSelectedArticle.getPageNumber() + 1));
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+            });
+            mArticleContent.addView(nextPageView);
+        }
 
     }
 
@@ -431,6 +432,25 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleContent.addView(separator);
 
         mNextArticle = mNextArticle.getNextArticle();
+
+        if (mNextArticle == null) {
+            View nextPageView = mLayoutInflater.inflate(R.layout.next_page_layout, null);
+            nextPageView.setLayoutParams(paragraphLayoutParams);
+            ((TextView) nextPageView.findViewById(R.id.page_text)).setText("Go to page " + (nextArticle.getPageNumber() + 1));
+            final Button nextButton = (Button) nextPageView.findViewById(R.id.next_button);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nextButton.setEnabled(false);
+                    EventBus.getDefault().postSticky(new NextPageEvent(mSelectedArticle.getPageNumber() + 1));
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+            });
+            mArticleContent.addView(nextPageView);
+
+        }
+
         loadingMore = false;
 
     }
@@ -440,18 +460,24 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
 
         switch (v.getId()) {
 
-            case R.id.previous_button:
-                /*new Handler().post(new Runnable() {
+            /*case R.id.previous_button:
+                  new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         mArticleScrollView.smoothScrollTo(0, mTops.get(mArticlePosition));
                     }
-                });*/
+                });
 
-                break;
+                break;*/
 
         }
 
+    }
+
+    @Override
+    public void onGlobalLayout() {
+
+        mScrollViewHeight = mArticleScrollView.getChildAt(0).getHeight();
     }
 
     /*

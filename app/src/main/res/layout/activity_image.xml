@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <ImageView
+    <ca.ubc.ubyssey.customviews.TouchImageView
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"

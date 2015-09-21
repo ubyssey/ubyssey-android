@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
@@ -33,6 +34,7 @@ public class NewsFeedAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater = null;
     private Typeface mHeadlineTypeface;
     private Typeface mMetaTypeface;
+
 
     public NewsFeedAdapter(Context context, Articles.Article[] articles) {
         mContext = context;
@@ -71,6 +73,7 @@ public class NewsFeedAdapter extends BaseAdapter {
             viewHolder.newsSectionTextView = (TextView) convertView.findViewById(R.id.section_label);
             viewHolder.newsTimestampTextView = (TextView) convertView.findViewById(R.id.time_label);
             viewHolder.newsReadTimeTextView = (TextView) convertView.findViewById(R.id.read_label);
+            viewHolder.newsPageNumberTextView = (TextView) convertView.findViewById(R.id.page_number);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (NewsItemViewHolder) convertView.getTag();
@@ -91,12 +94,20 @@ public class NewsFeedAdapter extends BaseAdapter {
         viewHolder.newsTimestampTextView.setText(DateUtils.getProperDateString(article.published_at));
         viewHolder.newsTimestampTextView.setTypeface(mMetaTypeface);
         viewHolder.newsReadTimeTextView.setTypeface(mMetaTypeface);
+        viewHolder.newsReadTimeTextView.setText(article.est_reading_time + " minute read");
 
         if (article.importance > 3 && position != 0) {
             viewHolder.newsImageView.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load(article.featured_image.url).fit().centerCrop().into(viewHolder.newsImageView);
         } else {
             viewHolder.newsImageView.setVisibility(View.GONE);
+        }
+
+        if (article.getNextArticle() == null) {
+            viewHolder.newsPageNumberTextView.setVisibility(View.VISIBLE);
+            viewHolder.newsPageNumberTextView.setText("p. " + article.getPageNumber());
+        } else {
+            viewHolder.newsPageNumberTextView.setVisibility(View.GONE);
         }
 
         return convertView;
@@ -113,6 +124,7 @@ public class NewsFeedAdapter extends BaseAdapter {
         TextView newsTimestampTextView;
         TextView newsSectionTextView;
         TextView newsReadTimeTextView;
+        TextView newsPageNumberTextView;
     }
 
 }

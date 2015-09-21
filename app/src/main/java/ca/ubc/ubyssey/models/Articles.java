@@ -25,7 +25,12 @@ public class Articles implements Serializable {
                 }
             }
         }
+    }
 
+    public void setPageNumbers(int pageNumber){
+        for (Article article : results) {
+            article.setPageNumber(pageNumber);
+        }
     }
 
     public class Article implements Serializable {
@@ -43,8 +48,11 @@ public class Articles implements Serializable {
         public String slug;
         public int revision_id;
         public String url;
+        public int est_reading_time;
 
         private Article nextArticle = null;
+        private int pageNumber = 1;
+        private String pageUrl;
 
         public Article getNextArticle() {
             return nextArticle;
@@ -54,6 +62,13 @@ public class Articles implements Serializable {
             this.nextArticle = nextArticle;
         }
 
+        public int getPageNumber(){
+            return pageNumber;
+        }
+
+        public void setPageNumber(int pageNumber){
+            this.pageNumber = pageNumber;
+        }
 
         public class FeaturedImage implements Serializable {
 

@@ -10,6 +10,8 @@
         android:id="@+id/trending_listview"
         android:layout_height="match_parent"
         android:divider="@android:color/darker_gray"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:scrollbarSize="4dp"
         android:dividerHeight="1dp" />
 
 </LinearLayout>

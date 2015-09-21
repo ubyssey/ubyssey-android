@@ -1,6 +1,7 @@
 package ca.ubc.ubyssey;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -286,6 +287,11 @@ public class MainActivity extends ActionBarActivity
         mErrorLayout.setVisibility(View.VISIBLE);
         TextView errorText = (TextView) mErrorLayout.findViewById(R.id.error_text);
         errorText.setText(message);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

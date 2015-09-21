@@ -15,8 +15,7 @@
         android:background="@drawable/news_list_item_background"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp">
+        android:paddingTop="25dp">
 
         <TextView
             android:id="@+id/headline_label"
@@ -33,8 +32,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/light_black"
             android:layout_marginTop="13dp"
+            android:layout_marginBottom="25dp"
             android:layout_below="@+id/headline_label"
-            android:text="8 minute read"
             android:textSize="13sp" />
 
         <TextView
@@ -44,6 +43,7 @@
             android:textColor="@color/primary_blue"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="13dp"
+            android:layout_marginBottom="25dp"
             android:textSize="13sp"
             android:textAllCaps="true"
             android:layout_below="@+id/headline_label"
@@ -56,9 +56,22 @@
             android:textColor="@color/light_black"
             android:textSize="13sp"
             android:layout_marginLeft="15dp"
+            android:layout_marginBottom="25dp"
             android:layout_marginTop="13dp"
             android:layout_below="@+id/headline_label"
             android:layout_toRightOf="@+id/section_label" />
+
+        <TextView
+            android:id="@+id/page_number"
+            android:padding="4dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent_black"
+            android:textColor="@android:color/white"
+            android:fontFamily="sans-serif-light"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
