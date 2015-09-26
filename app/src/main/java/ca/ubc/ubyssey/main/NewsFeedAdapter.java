@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
@@ -81,10 +80,10 @@ public class NewsFeedAdapter extends BaseAdapter {
 
         Articles.Article article = mArticles[position];
         try {
-            String encodedString = new String(article.long_headline.getBytes("ISO-8859-1"), "UTF-8");
+            String encodedString = new String(article.headline.getBytes("ISO-8859-1"), "UTF-8");
             viewHolder.newsHeadline.setText(Html.fromHtml(encodedString));
         } catch (UnsupportedEncodingException e) {
-            viewHolder.newsHeadline.setText(article.long_headline);
+            viewHolder.newsHeadline.setText(article.headline);
             e.printStackTrace();
         }
 

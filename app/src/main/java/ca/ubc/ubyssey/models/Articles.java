@@ -37,7 +37,7 @@ public class Articles implements Serializable {
 
         public int id;
         public int parent;
-        public String long_headline;
+        public String headline;
         public String short_headline;
         public FeaturedImage featured_image;
         public Content[] content;

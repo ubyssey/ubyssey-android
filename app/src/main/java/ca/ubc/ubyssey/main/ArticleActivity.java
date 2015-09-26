@@ -27,7 +27,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -109,10 +108,10 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleTitle.setTypeface(titleTypeFace);
 
         try {
-            String encodedTitle = new String(mSelectedArticle.long_headline.getBytes("ISO-8859-1"), "UTF-8");
+            String encodedTitle = new String(mSelectedArticle.headline.getBytes("ISO-8859-1"), "UTF-8");
             mArticleTitle.setText(Html.fromHtml(encodedTitle));
         } catch (UnsupportedEncodingException e) {
-            mArticleTitle.setText(Html.fromHtml(mSelectedArticle.long_headline));
+            mArticleTitle.setText(Html.fromHtml(mSelectedArticle.headline));
             e.printStackTrace();
         }
 
@@ -406,10 +405,10 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         articleTitle.setTypeface(titleTypeFace);
 
         try {
-            String encodedTitle = new String(nextArticle.long_headline.getBytes("ISO-8859-1"), "UTF-8");
+            String encodedTitle = new String(nextArticle.headline.getBytes("ISO-8859-1"), "UTF-8");
             articleTitle.setText(Html.fromHtml(encodedTitle));
         } catch (UnsupportedEncodingException e) {
-            articleTitle.setText(Html.fromHtml(nextArticle.long_headline));
+            articleTitle.setText(Html.fromHtml(nextArticle.headline));
             e.printStackTrace();
         }
 
@@ -492,7 +491,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
             Picasso.with(this).load(RequestBuilder.URL_PREFIX + nextUpArticle.featured_image.url).fit().centerCrop().into(nextArticleImage);
             Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
             nextArticleTitleText.setTypeface(titleTypeFace);
-            nextArticleTitleText.setText(nextUpArticle.long_headline);
+            nextArticleTitleText.setText(nextUpArticle.headline);
             mArticleContent.addView(nextArticleImageLayout);
 
             nextArticleImageLayout.setOnClickListener(new View.OnClickListener() {
