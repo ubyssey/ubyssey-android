@@ -7,8 +7,13 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
+ * Custom type adapter for parsing the data object since the
+ * "data" field type is inconsistent and can either be a
+ * String, a Json array or a Json object.
+ *
  * Created by Chris Li on 4/30/2015.
  */
 public class DataTypeAdapter extends TypeAdapter<Data> {
@@ -68,6 +73,14 @@ public class DataTypeAdapter extends TypeAdapter<Data> {
         } else if (token.equals(JsonToken.NULL)) {
             in.nextNull();
             return null;
+        } else if (token.equals(JsonToken.BEGIN_ARRAY)) {
+            in.beginArray();
+            data.list = new ArrayList<String>();
+            while (!in.peek().equals(JsonToken.END_ARRAY)) {
+                String entry = in.nextString();
+                data.list.add(entry);
+            }
+            in.endArray();
         }
 
         return data;
