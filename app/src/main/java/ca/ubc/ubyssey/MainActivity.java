@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ca.ubc.ubyssey.main.FeedFragment;
+import ca.ubc.ubyssey.main.GalleriesFragment;
 import ca.ubc.ubyssey.main.SearchFragment;
 import ca.ubc.ubyssey.main.TrendingFragment;
 
@@ -44,6 +45,7 @@ public class MainActivity extends ActionBarActivity
     public static final int VIDEO_ITEM = 6;
     public static final int BLOG_ITEM = 7;
     public static final int TRENDING_ITEM = 8;
+    public static final int GALLERY_ITEM = 9;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -137,6 +139,11 @@ public class MainActivity extends ActionBarActivity
                 trendingLayout.setVisibility(View.VISIBLE);
                 transitionDrawable.startTransition(500);
                 mIsTrendingSelected = true;
+                break;
+
+            case GALLERY_ITEM:
+                handleToolbarTransitions();
+                fragmentTransaction.replace(R.id.container, new GalleriesFragment()).commit();
                 break;
         }
     }

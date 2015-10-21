@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -114,6 +115,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
                         convertView = mLayoutInflater.inflate(R.layout.drawer_list_item, parent, false);
                         itemHolder = new ItemHolder();
                         itemHolder.itemTextView = (TextView) convertView.findViewById(R.id.menu_item_text);
+                        itemHolder.imageView = (ImageView) convertView.findViewById(R.id.menu_item_icon);
                         if (menuItem.getTitle().equals("Trending")) {
                             convertView.setBackground(mContext.getResources().getDrawable(R.drawable.drawer_trending_item_background));
                         }
@@ -123,6 +125,12 @@ public class NavigationDrawerAdapter extends BaseAdapter {
                     }
 
                     itemHolder.itemTextView.setText(menuItem.getTitle());
+                    if (menuItem.getTitle().equals("Galleries")) {
+                        itemHolder.imageView.setImageResource(R.drawable.ic_image_photo_library);
+                        itemHolder.imageView.setVisibility(View.VISIBLE);
+                    } else {
+                        itemHolder.imageView.setVisibility(View.GONE);
+                    }
                     return convertView;
             }
 
@@ -140,6 +148,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
     public static class ItemHolder {
         TextView itemTextView;
+        ImageView imageView;
     }
 
     public static class TopicHolder {

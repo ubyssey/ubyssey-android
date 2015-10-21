@@ -8,7 +8,15 @@
     android:paddingTop="15dp"
     android:paddingBottom="15dp">
 
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/menu_item_icon"
+        android:layout_marginRight="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
     <TextView
+        android:layout_toRightOf="@+id/menu_item_icon"
         android:id="@+id/menu_item_text"
         android:textSize="23sp"
         android:fontFamily="sans-serif"

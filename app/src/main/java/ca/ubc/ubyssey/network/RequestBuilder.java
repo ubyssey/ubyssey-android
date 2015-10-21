@@ -15,6 +15,7 @@ public class RequestBuilder {
     public static final String VIDEO_URL = "http://ubyssey.ca/api/sections/video/frontpage/";
     public static final String BLOG_URL = "http://ubyssey.ca/api/sections/blog/frontpage/";
     public static final String TOPICS_URL = "http://ubyssey.ca/api/topics/";
+    public static final String GALLERIES_URL = "http://ubyssey.ca/api/galleries/";
 
     public static String getTopicUrl(int topicId){
         return "http://ubyssey.ca/api/topics/" + topicId + "/articles/";

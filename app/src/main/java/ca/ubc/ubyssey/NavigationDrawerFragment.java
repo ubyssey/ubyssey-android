@@ -177,6 +177,7 @@ public class NavigationDrawerFragment extends Fragment {
         menuItems.add(new DrawerItem("Video", MainActivity.VIDEO_ITEM));
         menuItems.add(new DrawerItem("Blog", MainActivity.BLOG_ITEM));
         menuItems.add(new DrawerItem("Trending", MainActivity.TRENDING_ITEM));
+        menuItems.add(new DrawerItem("Galleries", MainActivity.GALLERY_ITEM));
         menuItems.add(new DrawerItem(true, "Topics"));
 
         return menuItems;
