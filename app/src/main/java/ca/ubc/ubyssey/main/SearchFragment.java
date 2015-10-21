@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.network.GsonRequest;
+import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.network.RequestManager;
 import de.greenrobot.event.EventBus;
 
@@ -48,7 +49,7 @@ public class SearchFragment extends Fragment {
 
     public void makeSearchRequest(final String searchTerm) {
 
-        GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(getSearchUrl(searchTerm), Articles.class, null, new Response.Listener<Articles>() {
+        GsonRequest<Articles> articlesGsonRequest = new GsonRequest<Articles>(RequestBuilder.getSearchUrl(searchTerm), Articles.class, null, new Response.Listener<Articles>() {
             @Override
             public void onResponse(Articles response) {
 
@@ -91,10 +92,6 @@ public class SearchFragment extends Fragment {
         mSearchListView.setAdapter(null);
         mSearchEmptyText.setVisibility(View.VISIBLE);
         mSearchEmptyText.setText("Please enter a search term.");
-    }
-
-    private String getSearchUrl(String searchTerm) {
-        return "http://dev.ubyssey.ca/api/articles/?q=" + searchTerm;
     }
 
 }

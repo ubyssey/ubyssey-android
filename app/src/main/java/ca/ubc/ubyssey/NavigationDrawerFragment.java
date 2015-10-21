@@ -30,6 +30,7 @@ import java.util.List;
 import ca.ubc.ubyssey.models.DrawerItem;
 import ca.ubc.ubyssey.models.Topics;
 import ca.ubc.ubyssey.network.GsonRequest;
+import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.network.RequestManager;
 
 /**
@@ -128,7 +129,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        GsonRequest<Topics> trendingGsonRequest = new GsonRequest<Topics>("http://dev.ubyssey.ca/api/topics/", Topics.class, null, new Response.Listener<Topics>() {
+        GsonRequest<Topics> trendingGsonRequest = new GsonRequest<Topics>(RequestBuilder.TOPICS_URL, Topics.class, null, new Response.Listener<Topics>() {
             @Override
             public void onResponse(Topics response) {
 

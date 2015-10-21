@@ -362,7 +362,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                 header.setLayoutParams(paragraphLayoutParams);
                 header.setTextColor(Color.BLACK);
                 header.setPadding(sidePadding, 0, sidePadding, 0);
-                header.setText(content.data.content);
+                header.setText(Html.fromHtml(content.data.content));
 
                 if (content.data.size.equals("H1")) {
                     header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);

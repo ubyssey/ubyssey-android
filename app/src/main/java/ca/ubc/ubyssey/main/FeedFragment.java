@@ -35,13 +35,13 @@ import ca.ubc.ubyssey.models.Articles;
 import ca.ubc.ubyssey.models.Data;
 import ca.ubc.ubyssey.models.DataTypeAdapter;
 import ca.ubc.ubyssey.network.GsonRequest;
+import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.network.RequestManager;
 import ca.ubc.ubyssey.view.ViewHelper;
 import de.greenrobot.event.EventBus;
 
 /**
  * Fragment used to display the news list.
- * TODO: Extend class so that it can show different list content
  * <p/>
  * Created by Chris Li on 3/16/2015.
  */
@@ -126,6 +126,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         mNewsHeaderView = inflater.inflate(R.layout.news_list_header, null);
         mNewsImageView = (ImageView) mNewsHeaderView.findViewById(R.id.main_image);
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        mSwipeContainer.setProgressViewOffset(false, 0, 200);
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -151,7 +152,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         boolean isTopic = bundle.getBoolean(IS_TOPIC_KEY, false);
 
         if (isTopic) {
-            mUrl = "http://dev.ubyssey.ca/api/topics/"+ id +"/articles/";
+            mUrl = RequestBuilder.getTopicUrl(id);
         } else {
             mUrl = getFeedUrl(id);
         }
@@ -276,28 +277,28 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
         switch (category) {
 
             case MainActivity.HOME_ITEM:
-                url = "http://dev.ubyssey.ca/api/articles/";
+                url = RequestBuilder.HOME_URL;
                 break;
             case MainActivity.CULTURE_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/culture/frontpage/";
+                url = RequestBuilder.CULTURE_URL;
                 break;
             case MainActivity.OPINION_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/opinion/frontpage/";
+                url = RequestBuilder.OPINION_URL;
                 break;
             case MainActivity.FEATURES_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/features/frontpage/";
+                url = RequestBuilder.FEATURES_URL;
                 break;
             case MainActivity.DATA_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/data/frontpage/";
+                url = RequestBuilder.DATA_URL;
                 break;
             case MainActivity.SPORTS_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/sports/frontpage/";
+                url = RequestBuilder.SPORTS_URL;
                 break;
             case MainActivity.VIDEO_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/video/frontpage/";
+                url = RequestBuilder.VIDEO_URL;
                 break;
             case MainActivity.BLOG_ITEM:
-                url = "http://dev.ubyssey.ca/api/sections/blog/frontpage/";
+                url = RequestBuilder.BLOG_URL;
                 break;
         }
 
