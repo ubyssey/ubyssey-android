@@ -335,6 +335,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(ArticleActivity.this, ImageActivity.class);
+                        intent.putExtra(ImageActivity.TOOLBAR_TITLE_KEY, content.data.title);
                         EventBus.getDefault().postSticky(content.data);
                         startActivity(intent);
                     }

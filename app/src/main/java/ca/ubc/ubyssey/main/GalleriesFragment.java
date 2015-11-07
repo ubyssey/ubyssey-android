@@ -1,6 +1,7 @@
 package ca.ubc.ubyssey.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import ca.ubc.ubyssey.models.Galleries;
 import ca.ubc.ubyssey.network.GsonRequest;
 import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.network.RequestManager;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Chris Li on 10/20/2015.
@@ -88,7 +90,7 @@ public class GalleriesFragment extends Fragment{
 
             Galleries.Gallery gallery = mGalleryList.get(position);
             holder.titleTextView.setText(gallery.title);
-            GalleryListAdapter adapter = new GalleryListAdapter(mContext, gallery.images);
+            GalleryListAdapter adapter = new GalleryListAdapter(mContext, gallery.images, gallery.title);
             holder.galleryRecyclerView.setAdapter(adapter);
             holder.galleryRecyclerView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
@@ -113,16 +115,18 @@ public class GalleriesFragment extends Fragment{
 
     }
 
-    private class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.ViewHolder> {
+    private static class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.ViewHolder> {
 
         private Context mContext;
         private LayoutInflater mLayoutInflater;
         private List<Galleries.Image> mGalleryPhotoList;
+        private String mGalleryTitle;
 
-        public GalleryListAdapter (Context context, List<Galleries.Image> galleryImages) {
+        public GalleryListAdapter(Context context, List<Galleries.Image> galleryImages, String title) {
             this.mContext = context;
             this.mLayoutInflater = LayoutInflater.from(context);
             this.mGalleryPhotoList = galleryImages;
+            this.mGalleryTitle = title;
         }
 
         @Override
@@ -133,7 +137,7 @@ public class GalleriesFragment extends Fragment{
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
 
             Galleries.Image thumbnail = mGalleryPhotoList.get(position);
             Picasso.with(mContext)
@@ -141,6 +145,20 @@ public class GalleriesFragment extends Fragment{
                     .fit()
                     .centerCrop()
                     .into(holder.galleryImage);
+
+            holder.galleryImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(mContext, ImageActivity.class);
+                    intent.putExtra(ImageActivity.TOOLBAR_TITLE_KEY, mGalleryTitle);
+                    intent.putExtra(ImageActivity.IS_PAGER_KEY, true);
+                    intent.putExtra(ImageActivity.GALLERY_ITEM_POSITION_KEY, position);
+                    Galleries.Image[] imageArray = mGalleryPhotoList.toArray(new Galleries.Image[mGalleryPhotoList.size()]);
+                    EventBus.getDefault().postSticky(imageArray);
+                    mContext.startActivity(intent);
+                }
+            });
 
         }
 

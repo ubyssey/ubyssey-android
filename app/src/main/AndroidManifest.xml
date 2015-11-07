@@ -36,12 +36,7 @@
         <activity
             android:name=".main.ImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent"
-            android:parentActivityName=".main.ArticleActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.ArticleActivity" />
+            android:theme="@style/Theme.Transparent">
 
         </activity>
     </application>
