@@ -107,20 +107,22 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         Typeface titleTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Semibold.otf");
         mArticleTitle.setTypeface(titleTypeFace);
 
-        try {
-            String encodedTitle = new String(mSelectedArticle.headline.getBytes("ISO-8859-1"), "UTF-8");
-            mArticleTitle.setText(Html.fromHtml(encodedTitle));
-        } catch (UnsupportedEncodingException e) {
-            mArticleTitle.setText(Html.fromHtml(mSelectedArticle.headline));
-            e.printStackTrace();
+        if (mSelectedArticle.headline != null) {
+            try {
+                String encodedTitle = new String(mSelectedArticle.headline.getBytes("ISO-8859-1"), "UTF-8");
+                mArticleTitle.setText(Html.fromHtml(encodedTitle));
+            } catch (UnsupportedEncodingException e) {
+                mArticleTitle.setText(Html.fromHtml(mSelectedArticle.headline));
+                e.printStackTrace();
+            }
         }
 
         mArticleAuthor = (TextView) findViewById(R.id.article_author);
         Typeface metaTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Bold.otf");
 
         mArticleAuthor.setTypeface(metaTypeFace);
-        if (mSelectedArticle.authors.length > 0) {
-            mArticleAuthor.setText("By " + mSelectedArticle.authors[0].full_name);
+        if (mSelectedArticle.authors.size() > 0) {
+            mArticleAuthor.setText("By " + mSelectedArticle.authors.get(0).full_name);
         }
 
         mArticleDate = (TextView) findViewById(R.id.article_date);
@@ -257,7 +259,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
      */
     private void buildArticleView() {
 
-        Articles.Article.Content[] contents = mSelectedArticle.content;
+        List<Articles.Article.Content> contents = mSelectedArticle.content;
 
         LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         paragraphLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
@@ -294,7 +296,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
      *
      * @param contents
      */
-    private void buildArticleContent(Articles.Article.Content[] contents) {
+    private void buildArticleContent(List<Articles.Article.Content> contents) {
 
         LinearLayout.LayoutParams paragraphLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         paragraphLayoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.extra_padding), 0, (int) getResources().getDimension(R.dimen.extra_padding));
@@ -416,8 +418,8 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         TextView articleAuthor = (TextView) view.findViewById(R.id.article_author);
         Typeface metaTypeFace = Typeface.createFromAsset(getAssets(), "fonts/LFT_Etica_Bold.otf");
         articleAuthor.setTypeface(metaTypeFace);
-        if (nextArticle.authors.length > 0) {
-            articleAuthor.setText("By " + nextArticle.authors[0].full_name);
+        if (nextArticle.authors.size() > 0) {
+            articleAuthor.setText("By " + nextArticle.authors.get(0).full_name);
         }
         TextView articleDate = (TextView) view.findViewById(R.id.article_date);
         articleDate.setText("·" + DateUtils.getProperDateString(nextArticle.published_at));

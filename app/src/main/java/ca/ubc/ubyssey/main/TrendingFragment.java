@@ -39,7 +39,7 @@ public class TrendingFragment extends Fragment {
             public void onResponse(Trending response) {
 
                 if (response != null) {
-                    if (response.results.length > 0) {
+                    if (response.results.size() > 0) {
                         if (isAdded() && getActivity() != null) {
                             mTrendingFeedAdapter = new TrendingFeedAdapter(getActivity(), response.results);
                             mTrendingList.setAdapter(mTrendingFeedAdapter);

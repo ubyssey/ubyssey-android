@@ -1,6 +1,8 @@
 package ca.ubc.ubyssey.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Articles model object
@@ -12,15 +14,15 @@ public class Articles implements Serializable {
     public int count;
     public String next;
     public String previous;
-    public Article[] results;
+    public ArrayList<Article> results;
 
     public void setupNextArticles() {
 
         if (results != null) {
-            if (results.length > 1) {
-                for (int i = 0; i < results.length; i++) {
-                    if (i + 1 < results.length) {
-                        results[i].setNextArticle(results[i + 1]);
+            if (results.size() > 1) {
+                for (int i = 0; i < results.size(); i++) {
+                    if (i + 1 < results.size()) {
+                        results.get(i).setNextArticle(results.get(i + 1));
                     }
                 }
             }
@@ -40,8 +42,8 @@ public class Articles implements Serializable {
         public String headline;
         public String short_headline;
         public FeaturedImage featured_image;
-        public Content[] content;
-        public Author[] authors;
+        public List<Content> content;
+        public List<Author> authors;
         public Section section;
         public String published_at;
         public int importance;

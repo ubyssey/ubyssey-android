@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
@@ -29,13 +30,13 @@ public class NewsFeedAdapter extends BaseAdapter {
     private static final String TAG = NewsFeedAdapter.class.getSimpleName();
 
     private Context mContext;
-    private Articles.Article[] mArticles;
+    private List<Articles.Article> mArticles;
     private LayoutInflater mLayoutInflater = null;
     private Typeface mHeadlineTypeface;
     private Typeface mMetaTypeface;
 
 
-    public NewsFeedAdapter(Context context, Articles.Article[] articles) {
+    public NewsFeedAdapter(Context context, List<Articles.Article> articles) {
         mContext = context;
         mArticles = articles;
         mLayoutInflater = LayoutInflater.from(context);
@@ -46,12 +47,12 @@ public class NewsFeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mArticles.length;
+        return mArticles.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mArticles[position];
+        return mArticles.get(position);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class NewsFeedAdapter extends BaseAdapter {
             viewHolder = (NewsItemViewHolder) convertView.getTag();
         }
 
-        Articles.Article article = mArticles[position];
+        Articles.Article article = mArticles.get(position);
         try {
             String encodedString = new String(article.headline.getBytes("ISO-8859-1"), "UTF-8");
             viewHolder.newsHeadline.setText(Html.fromHtml(encodedString));
@@ -112,8 +113,8 @@ public class NewsFeedAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void reload(Articles.Article[] newArticles){
-        mArticles = Utils.concatenate(mArticles, newArticles);
+    public void reload(List<Articles.Article> newArticles){
+        mArticles.addAll(newArticles);
         notifyDataSetChanged();
     }
 

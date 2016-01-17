@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
             public void onResponse(Articles response) {
 
                 if (response != null) {
-                    if (response.results.length > 0) {
+                    if (response.results.size() > 0) {
                         if (isAdded() && getActivity() != null) {
                             response.setupNextArticles();
                             mSearchResultsAdapter = new NewsFeedAdapter(getActivity(), response.results);

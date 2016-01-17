@@ -109,7 +109,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                     articles.setupNextArticles();
                     articles.setPageNumbers(nextPageEvent.nextPage);
                     Intent articleIntent = new Intent(getActivity(), ArticleActivity.class);
-                    EventBus.getDefault().postSticky(articles.results[0]);
+                    EventBus.getDefault().postSticky(articles.results.get(0));
                     startActivityForResult(articleIntent, ARTICLE_REQUEST_CODE);
                 }
             }
@@ -172,7 +172,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                     @Override
                     public void onResponse(Articles response) {
                         if (response != null) {
-                            if (response.results.length > 0) {
+                            if (response.results.size() > 0) {
                                 if (isAdded() && getActivity() != null) {
                                     mNextArticlesUrl = response.next;
                                     response.setupNextArticles();
@@ -233,12 +233,12 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
             public void onResponse(Articles response) {
 
                 if (response != null) {
-                    if (response.results.length > 0) {
+                    if (response.results.size() > 0) {
                         if (isAdded() && getActivity() != null) {
                             mNextArticlesUrl = response.next;
                             response.setupNextArticles();
                             response.setPageNumbers(mCurrentPageCount);
-                            Articles.Article firstArticle = response.results[0];
+                            Articles.Article firstArticle = response.results.get(0);
                             if (firstArticle.featured_image != null) {
                                 Picasso.with(getActivity()).load(firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
                             }

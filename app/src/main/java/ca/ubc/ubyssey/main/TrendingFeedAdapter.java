@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.models.Trending;
@@ -24,11 +26,11 @@ public class TrendingFeedAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater = null;
-    private Trending.TrendingItem[] mTrendingItems;
+    private List<Trending.TrendingItem> mTrendingItems;
     private Typeface mHeadlineTypeface;
     private Typeface mMetaTypeface;
 
-    public TrendingFeedAdapter (Context context, Trending.TrendingItem[] trendingItems) {
+    public TrendingFeedAdapter (Context context, List<Trending.TrendingItem> trendingItems) {
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         this.mTrendingItems = trendingItems;
@@ -39,12 +41,12 @@ public class TrendingFeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mTrendingItems.length;
+        return mTrendingItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mTrendingItems[position];
+        return mTrendingItems.get(position);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class TrendingFeedAdapter extends BaseAdapter {
             trendingItemViewHolder = (TrendingItemViewHolder) convertView.getTag();
         }
 
-        Trending.TrendingItem trendingItem = mTrendingItems[position];
+        Trending.TrendingItem trendingItem = mTrendingItems.get(position);
         if (trendingItem.name != null) {
             trendingItemViewHolder.posterText.setText(trendingItem.name);
         } else if (trendingItem.title != null) {
