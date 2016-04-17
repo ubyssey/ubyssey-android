@@ -141,7 +141,7 @@ public class GalleriesFragment extends Fragment{
 
             Galleries.Image thumbnail = mGalleryPhotoList.get(position);
             Picasso.with(mContext)
-                    .load(thumbnail.thumb)
+                    .load(RequestBuilder.ROOT_URL + thumbnail.thumb)
                     .fit()
                     .centerCrop()
                     .into(holder.galleryImage);

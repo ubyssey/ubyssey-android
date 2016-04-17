@@ -6,6 +6,7 @@ package ca.ubc.ubyssey.network;
 public class RequestBuilder {
 
     public static final String DEV_URL_PREFIX = "http://dev.ubyssey.ca";
+    public static final String ROOT_URL = "http://ubyssey.ca/";
     public static final String HOME_URL = "http://ubyssey.ca/api/articles/";
     public static final String CULTURE_URL = "http://ubyssey.ca/api/sections/culture/frontpage/";
     public static final String OPINION_URL = "http://ubyssey.ca/api/sections/opinion/frontpage/";

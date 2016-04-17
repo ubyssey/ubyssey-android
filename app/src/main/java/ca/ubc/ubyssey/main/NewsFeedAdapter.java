@@ -19,6 +19,7 @@ import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.Utils;
 import ca.ubc.ubyssey.models.Articles;
+import ca.ubc.ubyssey.network.RequestBuilder;
 
 /**
  * Adapter class to show the news feed items
@@ -98,7 +99,7 @@ public class NewsFeedAdapter extends BaseAdapter {
 
         if (article.importance > 3 && position != 0) {
             viewHolder.newsImageView.setVisibility(View.VISIBLE);
-            Picasso.with(mContext).load(article.featured_image.url).fit().centerCrop().into(viewHolder.newsImageView);
+            Picasso.with(mContext).load(RequestBuilder.ROOT_URL + article.featured_image.url).fit().centerCrop().into(viewHolder.newsImageView);
         } else {
             viewHolder.newsImageView.setVisibility(View.GONE);
         }

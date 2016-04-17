@@ -41,6 +41,7 @@ import ca.ubc.ubyssey.DateUtils;
 import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.events.NextPageEvent;
 import ca.ubc.ubyssey.models.Articles;
+import ca.ubc.ubyssey.network.RequestBuilder;
 import ca.ubc.ubyssey.view.ViewHelper;
 import de.greenrobot.event.EventBus;
 
@@ -97,7 +98,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         mArticleImageCaption = (TextView) findViewById(R.id.article_image_caption);
 
         if (mSelectedArticle.featured_image != null) {
-            Picasso.with(this).load(mSelectedArticle.featured_image.url).fit().centerCrop().into(mArticleImageView);
+            Picasso.with(this).load(RequestBuilder.ROOT_URL + mSelectedArticle.featured_image.url).fit().centerCrop().into(mArticleImageView);
             mArticleImageCaption.setText(mSelectedArticle.featured_image.caption);
         }
         mFeaturedImages.add(mArticleImageView);
@@ -332,7 +333,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
                 final ImageView image = new ImageView(this);
                 image.setLayoutParams(imageLayoutParams);
                 mArticleContent.addView(image);
-                Picasso.with(this).load(content.data.url).fit().centerCrop().into(image);
+                Picasso.with(this).load(RequestBuilder.ROOT_URL + content.data.url).fit().centerCrop().into(image);
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -394,7 +395,7 @@ public class ArticleActivity extends ActionBarActivity implements ObservableScro
         FrameLayout imageContainer = (FrameLayout) view.findViewById(R.id.article_image_container);
         ImageView articleImageView = (ImageView) view.findViewById(R.id.article_image);
         if (nextArticle.featured_image != null) {
-            Picasso.with(this).load(nextArticle.featured_image.url).fit().centerCrop().into(articleImageView);
+            Picasso.with(this).load(RequestBuilder.ROOT_URL + nextArticle.featured_image.url).fit().centerCrop().into(articleImageView);
         }
         mFeaturedImages.add(imageContainer);
 

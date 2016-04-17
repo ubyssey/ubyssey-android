@@ -240,7 +240,7 @@ public class FeedFragment extends Fragment implements ObservableScrollViewCallba
                             response.setPageNumbers(mCurrentPageCount);
                             Articles.Article firstArticle = response.results.get(0);
                             if (firstArticle.featured_image != null) {
-                                Picasso.with(getActivity()).load(firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
+                                Picasso.with(getActivity()).load(RequestBuilder.ROOT_URL + firstArticle.featured_image.url).fit().centerCrop().into(mNewsImageView);
                             }
                             mNewsAdapter = new NewsFeedAdapter(getActivity(), response.results);
                             mNewsListView.setAdapter(mNewsAdapter);

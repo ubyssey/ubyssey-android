@@ -23,6 +23,7 @@ import ca.ubc.ubyssey.R;
 import ca.ubc.ubyssey.customviews.TouchImageView;
 import ca.ubc.ubyssey.models.Data;
 import ca.ubc.ubyssey.models.Galleries;
+import ca.ubc.ubyssey.network.RequestBuilder;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -75,7 +76,7 @@ public class ImageActivity extends ActionBarActivity {
             imageView.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.GONE);
             Data imageData = EventBus.getDefault().removeStickyEvent(Data.class);
-            Picasso.with(this).load(imageData.url).into(imageView);
+            Picasso.with(this).load(RequestBuilder.ROOT_URL + imageData.url).into(imageView);
         }
     }
 
@@ -94,7 +95,7 @@ public class ImageActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
 
             Galleries.Image image = mGalleryImages[position];
-            return ImageFragment.newInstance(image.url);
+            return ImageFragment.newInstance(RequestBuilder.ROOT_URL + image.url);
         }
 
         @Override
